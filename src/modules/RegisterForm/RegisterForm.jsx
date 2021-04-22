@@ -8,7 +8,7 @@ import {InfoCircleTwoTone} from "@ant-design/icons";
 
 
 const RegisterForm = () => {
-  const [success, setSuccess] = useState(true)
+  const [success, setSuccess] = useState(false)
 
 
   const onFinish = (values) => {
@@ -29,23 +29,34 @@ const RegisterForm = () => {
       <Block>
         {!success
           ? <Form
-            name="basic"
+            name="register"
             initialValues={{ remember: true }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             size="large"
           >
-
             <Form.Item
               name="email"
-              rules={[{ required: true, message: 'Please input your username!' }]}
+              rules={[
+                {
+                  type: 'email',
+                  message: 'The input is not valid E-mail!',
+                },
+                {
+                  required: true,
+                  message: 'Please input your E-mail!',
+                },
+              ]}
             >
               <Input placeholder="Email"/>
             </Form.Item>
 
             <Form.Item
               name="username"
-              rules={[{ required: true, message: 'Please input your username!' }]}
+              rules={[
+                { required: true, message: 'Please input your username!' },
+                {min: 4, message: 'Должно быть минимум 4 символа'}
+              ]}
             >
               <Input placeholder="Имя пользователя"/>
             </Form.Item>
@@ -58,14 +69,28 @@ const RegisterForm = () => {
             </Form.Item>
 
             <Form.Item
-              name="repeatPassword"
-              rules={[{ required: true, message: 'Please input your password!' }]}
+              name="confirm"
+              dependencies={['password']}
+              rules={[
+                {
+                  required: true,
+                  message: 'Please confirm your password!',
+                },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue('password') === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                  },
+                }),
+              ]}
             >
               <Input.Password placeholder="Повторите пароль"/>
             </Form.Item>
 
             <Form.Item>
-              <Button type="primary" size="large">Зарегистрироваться</Button>
+              <Button type="primary" size="large" htmlType="submit">Зарегистрироваться</Button>
             </Form.Item>
             <Link className="auth__register-link" to="/login">Войти в аккаунт</Link>
           </Form>

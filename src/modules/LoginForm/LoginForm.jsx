@@ -20,7 +20,7 @@ const LoginForm = () => {
       </div>
 
       <Form
-        name="basic"
+        name="login-form"
         initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
@@ -28,7 +28,10 @@ const LoginForm = () => {
       >
         <Form.Item
           name="username"
-          rules={[{ required: true, message: 'Please input your username!' }]}
+          rules={[
+            { required: true, message: 'Please input your username!' },
+            {min: 4, message: 'Должно быть минимум 4 символа'}
+          ]}
         >
           <Input placeholder="Имя пользователя"/>
         </Form.Item>
@@ -40,7 +43,7 @@ const LoginForm = () => {
           <Input.Password placeholder="Пароль"/>
         </Form.Item>
         <Form.Item>
-          <Button type="primary" size="large">Войти в аккаунт</Button>
+          <Button type="primary" size="large" htmlType="submit">Войти в аккаунт</Button>
         </Form.Item>
         <Link className="auth__register-link" to="/register">Зарегистрироваться</Link>
       </Form>
