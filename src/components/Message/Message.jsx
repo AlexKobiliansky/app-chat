@@ -1,39 +1,53 @@
 import React from 'react';
-import distanceToNow from 'date-fns/formatDistanceToNow';
-import ruLocale from 'date-fns/locale/ru';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import readedSvg from '../../assets/img/readed.svg';
-import noReadedSvg from '../../assets/img/noreaded.svg';
+import Time from '../Time/Time';
 
 import './Message.sass';
+import IconReaded from '../IconReaded/IconReaded';
 
-const Message = ({avatar, user, text, date, isMe, isReaded, attachments}) => {
+const Message = ({
+  avatar,
+  user,
+  text,
+  date,
+  isMe,
+  isReaded,
+  attachments,
+  isTyping
+}) => {
   return (
-    <div className={classNames('message', {'message__isme': isMe})}>
+    <div className={classNames('message', {
+      'message__isme': isMe,
+      'message__is-typing': isTyping,
+      'message__image': attachments?.length === 1
+    })}>
       <div className="message__avatar">
         <img src={avatar} alt={`Avatar ${user.fullname}`}/>
       </div>
       <div className="message__content">
-        { isMe && isReaded
-          ? <img src={readedSvg} alt="readed icon" className="message__icon" />
-          : <img src={noReadedSvg} alt="readed icon" className="message__icon" />
-        }
-          <div className="message__bubble">
-            <p className="message__text">{text}</p>
-          </div>
-
-          {attachments &&
-          <div className="message__attachments">
-            {attachments?.map(item => (
-              <div key={item.filename} className="message__attachments-item">
-                <img src={item.url} alt={item.filename}/>
-              </div>
-            ))}
+        <IconReaded isMe={isMe} isReaded={isReaded} />
+        {(text || isTyping) && <div className="message__bubble">
+          {text && <p className="message__text">{text}</p>}
+          {isTyping &&
+          <div className="message__typing">
+            <span /><span /><span />
           </div>}
+        </div>}
 
-          <div className="message__date">{distanceToNow(new Date(date) , { addSuffix: true, locale: ruLocale })}</div>
-        </div>
+        {attachments &&
+        <div className="message__attachments">
+          {attachments?.map((item, index) => (
+            <div key={index} className="message__attachments-item">
+              <img src={item.url} alt={item.filename}/>
+            </div>
+          ))}
+        </div>}
+
+        {date && <div className="message__date">
+          <Time date={date}/>
+        </div>}
+      </div>
     </div>
   );
 };
@@ -49,7 +63,9 @@ Message.propTypes = {
   date: PropTypes.string,
   user: PropTypes.object,
   isMe: PropTypes.bool,
-  attachments: PropTypes.array
+  attachments: PropTypes.array,
+  isTyping: PropTypes.bool,
+  isReaded: PropTypes.bool
 }
 
 export default Message;
