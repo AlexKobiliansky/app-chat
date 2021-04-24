@@ -1,54 +1,60 @@
 import React from 'react';
 import Message from '../../components/Message/Message';
 import DialogItem from '../../components/DIalogItem/DialogItem';
+import Dialogs from '../../components/Dialogs/Dialogs';
 
 const Home = () => {
   return (
     <div className="home">
-      <div className="dialogs">
-        <DialogItem
-          user={{
-            fullname: 'Дмитрий Новиков',
-            online: true,
-          }}
-          unreaded={0}
-        />
 
-        <DialogItem
-          user={{
-            fullname: 'Дмитрий Новиков',
-            online: true,
-          }}
-          unreaded={600}
-        />
-
-        <DialogItem
-          user={{
-            fullname: 'Дмитрий Новиков',
-            online: true,
-          }}
-          unreaded={98}
-        />
-      </div>
-
-
-
-
-
-
-      {/*<Dialogs items={[*/}
-      {/*  {*/}
-      {/*    user: {*/}
-      {/*      fullname: 'Дмитрий Новиков',*/}
-      {/*      avatar: null,*/}
-      {/*    },*/}
-      {/*    message: {*/}
-      {/*      text: 'Lorem ipsum dolor sit amet, consectetur.',*/}
-      {/*      isReaded: false,*/}
-      {/*      updatedAt: new Date()*/}
-      {/*    }*/}
-      {/*  }*/}
-      {/*]} />*/}
+      <Dialogs
+        userId={0}
+        items={[
+          {
+            _id: Math.random(),
+            text: 'Lorem ipsum dolor sit amet, consectetur.',
+            isReaded: true,
+            updatedAt: '2021-04-23T13:51:50',
+            user: {
+              _id: 1,
+              fullname: 'Дмитрий Новиков1',
+              avatar: null,
+            }
+          },
+          {
+            _id: Math.random(),
+            text: 'Lorem ipsum dolor sit amet, consectetur.',
+            isReaded: true,
+            updatedAt: '2021-04-22T13:51:50',
+            user: {
+              _id: 1,
+              fullname: 'Дмитрий Новиков1',
+              avatar: null,
+            }
+          },
+          {
+            _id: Math.random(),
+            text: 'Lorem ipsum dolor sit amet, consectetur.',
+            isReaded: true,
+            updatedAt: '2021-04-24T13:51:50',
+            user: {
+              _id: 1,
+              fullname: 'Дмитрий Новиков1',
+              avatar: null,
+            }
+          },
+          {
+            _id: Math.random(),
+            text: 'Lorem ipsum dolor sit amet, consectetur.',
+            isReaded: true,
+            updatedAt: '2021-04-24T13:52:50',
+            user: {
+              _id: 1,
+              fullname: 'Дмитрий Новиков1',
+              avatar: null,
+            }
+          },
+      ]} />
 
 
 
