@@ -80,6 +80,7 @@
       background-color: #e5edff
       box-shadow: 0 4px 4px rgba(0, 0, 0, .02)
       margin-bottom: 0
+
     #{$self}__avatar
       margin-bottom: 0
   &__image
@@ -88,6 +89,45 @@
         img
           width: 150px
           height: 150px
+  &__is-audio
+    position: relative
+    #{$self}__bubble
+      width: 300px
+      position: relative
+      overflow: hidden
+    #{$self}__audio
+      &-btn
+        button
+          display: flex
+          justify-content: center
+          align-items: center
+          width: 28px
+          height: 28px
+          border-radius: 50%
+          background-color: #0f3997
+          border: none
+          cursor: pointer
+          img
+            height: 13px
+      &-info
+        display: flex
+        align-items: center
+        justify-content: space-between
+        position: relative
+        z-index: 2
+      &-duration
+        color: #fff
+        font-weight: 500
+        opacity: .5
+        font-size: 12px
+      &-progress
+        position: absolute
+        height: 100px
+        background-color: #418fff
+        left: 0
+        top: 0
+    audio
+      display: none
 
 
 
@@ -107,13 +147,14 @@
       margin-right: 0
       animation-delay: .4s
 
-
-
 @keyframes typingAnimation
   from
     opacity: .6
   to
     opacity: 1
+
+
+
 
 
 

@@ -8,10 +8,8 @@ const Dialogs = ({items, userId}) => {
       {orderBy(items, ['updatedAt'], ['desc']).map(item => (
           <DialogItem
             key={item._id}
-            user={item.user}
-            message={item}
-            unreaded={0}
-            isMe={item.user._id === userId }
+            isMe={item.user._id === userId}
+            {...item}
           />
         ))}
     </div>

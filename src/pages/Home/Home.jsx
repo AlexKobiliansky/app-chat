@@ -57,7 +57,12 @@ const Home = () => {
       ]} />
 
 
-
+      <Message
+        avatar="https://source.unsplash.com/random/100x100"
+        // text="Это аудио сообщение"
+        date="Thu Apr 22 2021 06:54:46"
+        audio='https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3'
+      />
 
 
       <Message

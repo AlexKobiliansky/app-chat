@@ -24,7 +24,7 @@ const getMessageTime = updatedAt => {
   }
 }
 
-const DialogItem = ({user, message, unreaded, isMe}) => {
+const DialogItem = ({user, unreaded, isMe, updatedAt, text}) => {
   return (
     <div className={classNames("dialogs__item", {"dialogs__item-online": user.online})}>
       <div className="dialogs__item-avatar">
@@ -35,11 +35,11 @@ const DialogItem = ({user, message, unreaded, isMe}) => {
         <div className="dialogs__item-info-top">
           <b>{user.fullname}</b>
           <span>
-            {getMessageTime(message.updatedAt)}
+            {getMessageTime(updatedAt)}
           </span>
         </div>
         <div className="dialogs__item-info-bottom">
-          <p>{message.text}</p>
+          <p>{text}</p>
           { isMe && <IconReaded isMe={true} isReaded={false}/>}
 
           {unreaded > 0 &&
