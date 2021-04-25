@@ -3,6 +3,7 @@ import Message from '../../components/Message/Message';
 import DialogItem from '../../components/DIalogItem/DialogItem';
 import Dialogs from '../../components/Dialogs/Dialogs';
 
+
 const Home = () => {
   return (
     <div className="home">
@@ -11,49 +12,27 @@ const Home = () => {
         userId={0}
         items={[
           {
-            _id: Math.random(),
+            _id: 'sd3ce9225fca3e988c2af215d4e544d3',
             text: 'Lorem ipsum dolor sit amet, consectetur.',
             isReaded: true,
             updatedAt: '2021-04-23T13:51:50',
             user: {
-              _id: 1,
+              _id: 'sd3ce9225fca3e988c2af215d4e544d3',
               fullname: 'Дмитрий Новиков1',
-              avatar: null,
+              avatar: 'https://source.unsplash.com/random/100x100',
             }
           },
           {
-            _id: Math.random(),
+            _id: '345ce9225fca3e988c2af215d4e544d3',
             text: 'Lorem ipsum dolor sit amet, consectetur.',
             isReaded: true,
             updatedAt: '2021-04-22T13:51:50',
             user: {
-              _id: 1,
+              _id: '345ce9225fca3e988c2af215d4e544d3',
               fullname: 'Дмитрий Новиков1',
               avatar: null,
             }
-          },
-          {
-            _id: Math.random(),
-            text: 'Lorem ipsum dolor sit amet, consectetur.',
-            isReaded: true,
-            updatedAt: '2021-04-24T13:51:50',
-            user: {
-              _id: 1,
-              fullname: 'Дмитрий Новиков1',
-              avatar: null,
-            }
-          },
-          {
-            _id: Math.random(),
-            text: 'Lorem ipsum dolor sit amet, consectetur.',
-            isReaded: true,
-            updatedAt: '2021-04-24T13:52:50',
-            user: {
-              _id: 1,
-              fullname: 'Дмитрий Новиков1',
-              avatar: null,
-            }
-          },
+          }
       ]} />
 
 

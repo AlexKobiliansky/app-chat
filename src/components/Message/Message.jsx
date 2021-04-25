@@ -34,7 +34,6 @@ const Message = ({
     } else {
       audioEl.current.pause();
     }
-
   }
 
   useEffect(() => {
@@ -53,12 +52,7 @@ const Message = ({
         setCurrentTime(audioEl.current.currentTime);
       });
     }
-
-
   }, [])
-
-
-
 
   return (
     <div className={classNames('message', {

@@ -5,15 +5,7 @@ import './DialogItem.sass';
 import format from 'date-fns/format';
 import isToday from 'date-fns/isToday';
 import parseISO from 'date-fns/parseISO';
-
-
-const getAvatar = avatar => {
-  if (avatar) {
-    return <img src={avatar} alt='alt'/>
-  } else {
-    //make avatar
-  }
-}
+import Avatar from '../Avatar/Avatar';
 
 const getMessageTime = updatedAt => {
   const date = parseISO(updatedAt)
@@ -28,8 +20,8 @@ const DialogItem = ({user, unreaded, isMe, updatedAt, text}) => {
   return (
     <div className={classNames("dialogs__item", {"dialogs__item-online": user.online})}>
       <div className="dialogs__item-avatar">
-        {/*<img src={user.avatar} alt={user.fullname}/>*/}
-        {getAvatar(user.avatar)}
+
+        <Avatar {...user} />
       </div>
       <div className="dialogs__item-info">
         <div className="dialogs__item-info-top">
