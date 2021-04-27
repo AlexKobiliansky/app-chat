@@ -1,0 +1,63 @@
+.home
+  height: 100%
+
+.chat
+  display: flex
+  background-color: #fff
+  width: 1140px
+  margin: 0 auto
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.04)
+  height: 100%
+  &__sidebar
+    width: 320px
+    border-right: 1px solid #f7f7f7
+    height: 100%
+    &-header
+      display: flex
+      justify-content: space-between
+      padding: 20px
+      height: 68px
+      border-bottom: 1px solid #f7f7f7
+      margin-bottom: 20px
+      &>div
+        svg
+          display: inline-block
+          margin-right: 5px
+    &-dialogs
+      height: calc(100% - 150px)
+      .dialogs
+        width: 100%
+        height: 100%
+        overflow: auto
+        &__item
+          padding: 10px 20px
+          margin-bottom: 0
+          width: 100%
+          cursor: pointer
+          transition: all .3s ease-in-out
+          &.active, &:hover
+            background-color: #f3f7ff
+
+  &__dialog
+    flex: 1
+    &-header
+      padding: 15px 20px
+      display: flex
+      border-bottom: 1px solid #f7f7f7
+      justify-content: space-between
+      align-items: center
+      &-center
+        text-align: center
+      &-username
+        font-weight: 700
+        margin-bottom: 5px
+        display: block
+    &-messages
+      padding: 20px
+      overflow: auto
+      height: calc(100% - 148px)
+
+
+
+
+

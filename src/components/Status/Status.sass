@@ -1,0 +1,19 @@
+.status
+  color: #bfbfbf
+  position: relative
+  display: inline-block
+  line-height: 1
+  &:before
+    content: ''
+    position: absolute
+    display: block
+    width: 6px
+    height: 6px
+    border-radius: 50%
+    background-color: red
+    left: -12px
+    top: 50%
+    transform: translateY(-37%)
+  &--online
+    &:before
+      background-color: #00c980

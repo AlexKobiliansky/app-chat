@@ -1,0 +1,29 @@
+.chat-input
+  position: relative
+  padding: 20px
+  &__smile, &__actions
+    position: absolute
+    top: 50%
+    transform: translateY(-50%)
+    z-index: 2
+  &__smile
+    left: 35px
+  &__actions
+    right: 35px
+    svg
+      margin-left: 10px
+  svg
+    font-size: 18px
+    position: relative
+    z-index: 2
+    fill: grey
+    cursor: pointer
+    transition: all .3s ease
+    &:hover
+      fill: #202020
+  input
+    border: 1px solid #d9d9d9!important
+    padding-left: 45px
+    padding-right: 100px
+    &:focus
+      box-shadow: none
