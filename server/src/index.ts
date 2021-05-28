@@ -1,22 +1,22 @@
 import mongoose from 'mongoose';
 import express from 'express';
+import bodyParser from 'body-parser';
+
+import UserController from './controllers/UserController';
+
 const app = express();
 const port = 4000;
 
-import User from './schemas/User';
+app.use(bodyParser.json());
 
-mongoose.connect('mongodb+srv://alex:632748@cluster0.iqw5e.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
+const User = new UserController();
 
-app.get('/', (_:any, res:any) => {
-    res.send('Hello World!');
+mongoose.connect('mongodb+srv://alex:632748@cluster0.iqw5e.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+    {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
 
-    const user = new User({
-        email: 'hello@google.com',
-        fullName: 'first user'
-    });
-
-    user.save().then(()=> console.log('user created!'));
-})
+app.get('/user/:id', User.show);
+app.post('/user/registration', User.create);
+app.delete('/user/:id', User.delete);
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
