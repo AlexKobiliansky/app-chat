@@ -7,7 +7,6 @@ import './Home.sass';
 import Status from '../../components/Status/Status';
 import ChatInput from '../../components/ChatInput/ChatInput';
 import Messages from '../../components/Messages/Messages';
-import dialogs from '../../assets/dialogs.json'
 
 const Home = () => {
   return (
@@ -26,7 +25,7 @@ const Home = () => {
           <div className="chat__sidebar-dialogs">
             <Dialogs
               userId={0}
-              items={dialogs} />
+            />
           </div>
         </div>
         <div className="chat__dialog">

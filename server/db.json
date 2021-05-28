@@ -15,7 +15,7 @@
       "text": "Lorem aute in culpa adipisicing aute aliquip nulla quis irure ea enim ullamco sunt. Consequat deserunt ipsum officia ut officia officia ut tempor tempor qui velit voluptate aliqua. Ad aliquip tempor tempor sint commodo esse deserunt et elit aute Lorem in et.",
       "updatedAt": "2021-04-23T13:51:50",
       "user": {
-        "_id": "41b4cc8ffc01aef863dfa8afcbbd0986",
+        "_id": "https://html5css.ru/w3images/avatar2.png",
         "fullname": "Fitzgerald Eaton",
         "avatar": null
       }
@@ -148,12 +148,12 @@
     },
     {
       "_id": "35ce83ca83f2ba0b7649c43cb",
-      "text": "Привет! 😃",
+      "text": "Привет! 😃 \uD83C\uDF85\uD83C\uDFFC",
       "updatedAt": "Mon Jun 08 1992 04:57:55 GMT+0000 (UTC)",
       "user": {
         "_id": "35ce83ca8f41ffe5a11c0b72c",
         "fullname": "Jacobs Barry",
-        "avatar": null
+        "avatar": "https://html5css.ru/w3images/avatar2.png"
       },
       "dialog": "6e68d13b2678d793d340b5fb0c79297d"
     },

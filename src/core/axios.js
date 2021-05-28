@@ -1,5 +1,6 @@
 import axios from 'axios';
 
-axios.defaults.baseUrl = 'http://localhost:4001';
+axios.defaults.baseURL = 'http://localhost:4001';
+// axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 
 export default axios;

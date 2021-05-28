@@ -1,7 +1,6 @@
 import React from 'react';
 import distanceToNow from 'date-fns/formatDistanceToNow';
 import ruLocale from 'date-fns/locale/ru';
-import PropTypes from 'prop-types';
 
 const Time = ({date}) => (
   <>
@@ -10,8 +9,8 @@ const Time = ({date}) => (
 );
 
 
-Time.propTypes = {
-  // date: PropTypes.string
-}
+// Time.propTypes = {
+//   // date: PropTypes.string
+// }
 
 export default Time;

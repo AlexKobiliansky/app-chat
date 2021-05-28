@@ -1,136 +1,43 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import Message from '../Message/Message';
+import messagesActions from '../../redux/actions/messages';
+import {Empty, Spin} from 'antd';
+import {useDispatch, useSelector} from 'react-redux';
+import classNames from "classnames";
+import './Messages.sass';
 
-const Messages = ({items}) => {
+const Messages = () => {
+  const dispatch = useDispatch();
+  const messages = useSelector(({messages}) => messages.items);
+  const isLoading = useSelector(({messages}) => messages.isLoading);
+  const dialogId = useSelector(({dialogs}) => dialogs.currentDialogId);
+  const messagesRef = useRef(null);
+
+
+  useEffect(() => {
+    if (dialogId) {
+      dispatch(messagesActions.fetchMessages(dialogId))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dialogId]);
+
+  useEffect(() => {
+      messagesRef.current.scrollTo(0, 99999)
+  }, [messages])
+
   return (
-    <div className="chat__dialog-messages">
-      <Message
-        avatar="https://source.unsplash.com/random/100x100"
-        // text="Это аудио сообщение"
-        date="Thu Apr 22 2021 06:54:46"
-        audio='https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3'
-      />
+    <div className={classNames('chat__dialog-messages', {'chat__dialog-isloading': isLoading})} ref={messagesRef}>
+      {isLoading
+        ? <Spin tip="Загрузка..." size="large" />
+        : messages && !isLoading
+          ? messages?.length
+            ? messages.map(item => <Message {...item} />)
+            : <Empty description="Диалог пуст"/>
 
-      <Message
-        avatar="https://source.unsplash.com/random/100x100"
-        text="Hello Lorem ipsum dolor sit ame"
-        date="Thu Apr 22 2021 06:54:46"
-        isMe={true}
-        isReaded={false}
-      />
-
-      <Message
-        avatar="https://source.unsplash.com/random/100x100"
-        text="Hello Lorem ipsum dolor sit ame"
-        date="Thu Apr 22 2021 06:54:46"
-        isMe={true}
-        isReaded={false}
-      />
-      <Message
-        avatar="https://source.unsplash.com/random/100x100"
-        text="Hello Lorem ipsum dolor sit ame"
-        date="Thu Apr 22 2021 06:54:46"
-        isMe={true}
-        isReaded={false}
-      />
-      <Message
-        avatar="https://source.unsplash.com/random/100x100"
-        text="Hello Lorem ipsum dolor sit ame"
-        date="Thu Apr 22 2021 06:54:46"
-        isMe={true}
-        isReaded={false}
-      />
-      <Message
-        avatar="https://source.unsplash.com/random/100x100"
-        text="Hello Lorem ipsum dolor sit ame"
-        date="Thu Apr 22 2021 06:54:46"
-        isMe={true}
-        isReaded={false}
-      />
-      <Message
-        avatar="https://source.unsplash.com/random/100x100"
-        text="Hello Lorem ipsum dolor sit ame"
-        date="Thu Apr 22 2021 06:54:46"
-        isMe={true}
-        isReaded={false}
-      />
-      <Message
-        avatar="https://source.unsplash.com/random/100x100"
-        text="Hello Lorem ipsum dolor sit ame"
-        date="Thu Apr 22 2021 06:54:46"
-        isMe={true}
-        isReaded={false}
-      />
-      <Message
-        avatar="https://source.unsplash.com/random/100x100"
-        text="Hello Lorem ipsum dolor sit ame"
-        date="Thu Apr 22 2021 06:54:46"
-        isMe={true}
-        isReaded={false}
-      />
-
-      <Message
-        avatar="https://source.unsplash.com/random/100x100"
-        isMe={true}
-        isReaded={true}
-        isTyping={true}
-      />
-
-      <Message
-        avatar="https://source.unsplash.com/random/100x100?2"
-        text="Lorem "
-        date="Thu Apr 22 2021 07:44:46"
-        isMe={false}
-        isReaded={true}
-        attachments={[
-          {
-            filename: 'image.jpg',
-            url: 'https://source.unsplash.com/random/100x100?3'
-          },
-          {
-            filename: 'image.jpg',
-            url: 'https://source.unsplash.com/random/100x100?4'
-          },
-          {
-            filename: 'image.jpg',
-            url: 'https://source.unsplash.com/random/100x100?5'
-          },
-          {
-            filename: 'image.jpg',
-            url: 'https://source.unsplash.com/random/100x100?3'
-          },
-          {
-            filename: 'image.jpg',
-            url: 'https://source.unsplash.com/random/100x100?4'
-          },
-          {
-            filename: 'image.jpg',
-            url: 'https://source.unsplash.com/random/100x100?5'
-          }
-        ]}
-      />
-
-      <Message
-        avatar="https://source.unsplash.com/random/100x100?2"
-        isMe={false}
-        isTyping={true}
-      />
-
-      <Message
-        avatar="https://source.unsplash.com/random/100x100?2"
-        text={null}
-        date="Thu Apr 22 2021 07:44:46"
-        isMe={false}
-        isReaded={true}
-        attachments={[
-          {
-            filename: 'image.jpg',
-            url: 'https://source.unsplash.com/random/100x100?3'
-          }
-        ]}
-      />
+          : <Empty description="Откройте диалог"/>
+      }
     </div>
-  );
+  )
 };
 
 export default Messages;

@@ -10,6 +10,8 @@ import pauseIcon from '../../assets/img/pause.svg';
 import playIcon from '../../assets/img/play.svg';
 
 import {convertCurrentTime} from '../../helpers/convertCurrentTime';
+import Avatar from "../Avatar/Avatar";
+import { Emoji } from 'emoji-mart';
 
 const Message = ({
   avatar,
@@ -52,7 +54,8 @@ const Message = ({
         setCurrentTime(audioEl.current.currentTime);
       });
     }
-  }, [])
+  }, []);
+
 
   return (
     <div className={classNames('message', {
@@ -62,12 +65,14 @@ const Message = ({
       'message__is-audio': audio
     })}>
       <div className="message__avatar">
-        <img src={avatar} alt={`Avatar ${user.fullname}`}/>
+
+        <Avatar {...user} />
+        {/*<img src={avatar} alt={`Avatar ${user.fullname}`}/>*/}
       </div>
       <div className="message__content">
         <IconReaded isMe={isMe} isReaded={isReaded} />
         {(audio || text || isTyping) && <div className="message__bubble">
-          {text && <p className="message__text">{text}</p>}
+          {text && <p className="message__text">{text} <Emoji emoji=':santa::skin-tone-3:' size={16} /></p>}
 
           {isTyping &&
           <div className="message__typing">

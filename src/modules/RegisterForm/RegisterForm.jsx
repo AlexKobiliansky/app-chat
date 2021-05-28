@@ -8,8 +8,7 @@ import {InfoCircleTwoTone} from "@ant-design/icons";
 
 
 const RegisterForm = () => {
-  const [success, setSuccess] = useState(false)
-
+  const [success] = useState(false);
 
   const onFinish = (values) => {
     console.log('Success:', values);
