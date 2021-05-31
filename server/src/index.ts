@@ -6,10 +6,13 @@ import UserController from './controllers/UserController';
 import DialogController from './controllers/DialogController';
 import MessageController from './controllers/MessageController';
 
+import updateLastSeen from './middleware/updateLastSeen';
+
 const app = express();
 const port = 4000;
 
 app.use(bodyParser.json());
+app.use(updateLastSeen);
 
 const User = new UserController();
 const Dialog = new DialogController();
