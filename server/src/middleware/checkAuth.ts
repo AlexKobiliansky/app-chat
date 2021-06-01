@@ -14,7 +14,7 @@ export default (req: any, res: any, next: any) => {
       req.user = user;
       next();
     })
-    .catch(() => {
+    .catch(err => {
       res.status(403).json({ message: "Invalid auth token provided." });
     });
 };

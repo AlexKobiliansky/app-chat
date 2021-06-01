@@ -10,6 +10,7 @@ import dotenv from 'dotenv';
 
 import updateLastSeen from './middleware/updateLastSeen';
 import checkAuth from './middleware/checkAuth';
+import loginValidation from './utils/validations/login';
 
 dotenv.config();
 const app = express();
@@ -27,7 +28,7 @@ mongoose.connect('mongodb+srv://alex:632748@cluster0.iqw5e.mongodb.net/myFirstDa
 
 app.get('/user/:id', User.show);
 app.post('/user/registration', User.create);
-app.post('/user/login', User.login);
+app.post('/user/login', loginValidation, User.login);
 app.delete('/user/:id', User.delete);
 
 
