@@ -1,7 +1,15 @@
 import express from 'express';
 import MessageModel from '../models/Message';
+import socket from "socket.io";
 
 class MessageController {
+
+  io: socket.Server;
+
+  constructor(io: socket.Server) {
+    this.io = io;
+  }
+
   index(req: express.Request, res: express.Response) {
     const dialogId: any = req.query.dialog
     MessageModel.find({dialog: dialogId})
@@ -17,8 +25,8 @@ class MessageController {
   }
 
 
-  create(req: express.Request, res: express.Response) {
-    const userId = '60b0c6c3f199114df1e6bded';
+  create(req: any, res: express.Response) {
+    const userId = req.user._id;
 
     const postData = {
       text: req.body.text,

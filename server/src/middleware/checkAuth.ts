@@ -3,15 +3,15 @@ import verifyJWTToken from "../utils/verifyJWToken";
 import { IUser } from "../models/User";
 
 export default (req: any, res: any, next: any) => {
-  if (req.path === "/user/login" || req.path === "/user/registration") {
+  if (req.path === "/user/login" || req.path === "/user/registration" || req.path === "/socket") {
     return next();
   }
 
   const token = req.headers.token;
 
   verifyJWTToken(token)
-    .then((user) => {
-      req.user = user;
+    .then((user: any) => {
+      req.user = user.data._doc;
       next();
     })
     .catch(err => {

@@ -1,10 +1,19 @@
 import express from 'express';
 import DialogModel from '../models/Dialog';
 import MessageModel from '../models/Message';
+import socket from "socket.io";
 
 class DialogController {
-  index(req: express.Request, res: express.Response) {
-    const authorId: any = req.params.id
+
+  io: socket.Server;
+
+  constructor(io: socket.Server) {
+    this.io = io;
+  }
+
+  index(req: any, res: express.Response) {
+    const authorId: any = req.user._id
+
     DialogModel.find({author: authorId})
       .populate(['author', 'partner'])
       .exec(function(err, dialogs) {
