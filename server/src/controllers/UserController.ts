@@ -1,11 +1,9 @@
 import express from 'express';
 import UserModel from '../models/User';
-import {IUser} from '../models/User';
 import { validationResult } from 'express-validator';
 import bcrypt from 'bcrypt';
 import socket from "socket.io";
 import createJWToken from "../utils/createJWToken";
-import generatePasswordHash from "../utils/generatePasswordHash";
 
 
 class UserController {
@@ -16,7 +14,7 @@ class UserController {
     this.io = io;
   }
 
-  show(req: express.Request, res: express.Response) {
+  show = (req: express.Request, res: express.Response) => {
     const id: string = req.params.id
     UserModel.findById(id, (err, user) => {
       if (err) {
@@ -40,7 +38,7 @@ class UserController {
     });
   };
 
-  create(req: express.Request, res: express.Response) {
+  create = (req: express.Request, res: express.Response) => {
     const postData = {
       email: req.body.email,
       fullName: req.body.fullName,
@@ -56,7 +54,7 @@ class UserController {
     });
   }
 
-  delete(req: express.Request, res: express.Response) {
+  delete = (req: express.Request, res: express.Response) => {
     const id: string = req.params.id
     UserModel.findOneAndRemove({_id: id})
       .then(user => {
@@ -73,7 +71,7 @@ class UserController {
       });
   }
 
-  login(req: express.Request, res: express.Response) {
+  login = (req: express.Request, res: express.Response) => {
     const postData = {
       email: req.body.email,
       password: req.body.password

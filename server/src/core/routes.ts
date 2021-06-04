@@ -12,9 +12,9 @@ import checkAuth from "../middleware/checkAuth";
 
 
 const createRoutes = (app: express.Express, io: socket.Server) => {
-  const User = new UserController();
-  const Dialog = new DialogController();
-  const Message = new MessageController();
+  const User = new UserController(io);
+  const Dialog = new DialogController(io);
+  const Message = new MessageController(io);
 
   app.use(cors({origin: `http://localhost:${process.env.PORT}`}));
   app.use(bodyParser.json());

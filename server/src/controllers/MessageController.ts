@@ -10,7 +10,7 @@ class MessageController {
     this.io = io;
   }
 
-  index(req: express.Request, res: express.Response) {
+  index = (req: express.Request, res: express.Response) => {
     const dialogId: any = req.query.dialog
     MessageModel.find({dialog: dialogId})
       .populate(['dialog'])
@@ -25,7 +25,7 @@ class MessageController {
   }
 
 
-  create(req: any, res: express.Response) {
+  create = (req: any, res: express.Response) => {
     const userId = req.user._id;
 
     const postData = {
@@ -39,14 +39,23 @@ class MessageController {
     message
       .save()
       .then((obj: any) => {
-        res.json(obj);
+        obj.populate('dialog', (err: any, message: any) => {
+          if (err) {
+            return res.status(404).json({
+              message: 'No Messages'
+            });
+          }
+          res.json(message);
+          this.io.emit('SERVER:NEW_MESSAGE', message)
+        })
+
       })
       .catch(reason => {
-        res.json(reason);
+        return res.json(reason);
       });
   }
 
-  delete(req: express.Request, res: express.Response) {
+  delete = (req: express.Request, res: express.Response) => {
     const id: string = req.params.id
     MessageModel.findOneAndRemove({_id: id})
       .then(message => {
