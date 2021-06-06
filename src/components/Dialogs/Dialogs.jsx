@@ -18,7 +18,7 @@ const Dialogs = ({items, userId}) => {
 
   useEffect(() => {
     if (!dialogs.length) {
-      dispatch(dialogsActions.fetchDialogs());
+      // dispatch(dialogsActions.fetchDialogs());
     }
     setFiltered(dialogs);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -42,7 +42,7 @@ const Dialogs = ({items, userId}) => {
         ? orderBy(filtered, ['updatedAt'], ['desc']).map(item => (
           <DialogItem
             key={item._id}
-            isMe={item.user._id === userId}
+            isMe={item.author._id === userId}
             onSelect = {onSelectDialog}
             currentDialogId={currentDialogId}
             {...item}

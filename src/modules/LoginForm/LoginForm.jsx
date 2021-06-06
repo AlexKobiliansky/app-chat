@@ -1,12 +1,21 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Form, Input} from "antd";
 import Button from "../../components/Button/Button";
 import {Link} from 'react-router-dom';
 import Block from "../../components/Block/Block";
+import {useDispatch} from "react-redux";
+import actions from "../../redux/actions/users";
+import { useHistory } from "react-router-dom";
+
 
 const LoginForm = () => {
+  const dispatch = useDispatch();
+  let history = useHistory();
+
   const onFinish = (values) => {
-    console.log('Success:', values);
+    dispatch(actions.fetchUserLogin(values)).then(() => {
+      history.push("/im");
+    })
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -27,7 +36,7 @@ const LoginForm = () => {
         size="large"
       >
         <Form.Item
-          name="username"
+          name="email"
           rules={[
             { required: true, message: 'Please input your username!' },
             {min: 4, message: 'Должно быть минимум 4 символа'}

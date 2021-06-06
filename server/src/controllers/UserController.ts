@@ -83,7 +83,7 @@ class UserController {
     }
 
     UserModel.findOne({email: postData.email}, (err, user: any) => {
-      if (err) {
+      if (err || !user) {
         return res.status(404).json({
           message: 'auth error: no such user'
         });
