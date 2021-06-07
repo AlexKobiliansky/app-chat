@@ -6,6 +6,7 @@ import UserController from "../controllers/UserController";
 import DialogController from "../controllers/DialogController";
 import MessageController from "../controllers/MessageController";
 import loginValidation from "../utils/validations/login";
+import registerValidation from "../utils/validations/register";
 import cors from "cors";
 import updateLastSeen from "../middleware/updateLastSeen";
 import checkAuth from "../middleware/checkAuth";
@@ -22,10 +23,12 @@ const createRoutes = (app: express.Express, io: socket.Server) => {
   app.use(checkAuth);
 
   app.get("/user/me", User.getMe);
+  app.get('/user/verify', User.verify);
+  app.post('/user/signup', registerValidation, User.create);
+  app.post('/user/signin', loginValidation, User.login);
   app.get('/user/:id', User.show);
-  app.post('/user/registration', User.create);
-  app.post('/user/login', loginValidation, User.login);
   app.delete('/user/:id', User.delete);
+
 
 
   app.get('/dialogs', Dialog.index);

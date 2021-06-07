@@ -7,7 +7,7 @@ import Home from './pages/Home/Home';
 function App() {
   return (
     <div className="wrapper">
-      <Route exact path={["/", "/login", "/register"]} component={Auth} />
+      <Route exact path={["/", "/login", "/register", "/register/verify"]} component={Auth} />
       <Route exact path="/im" component={Home} />
     </div>
   );

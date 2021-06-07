@@ -1,6 +1,7 @@
 import mongoose, {Schema, Document} from 'mongoose';
 import isEmail from 'validator/lib/isEmail';
 import generatePasswordHash from '../utils/generatePasswordHash';
+import {string} from "prop-types";
 
 export interface IUser extends Document {
   email?: string;
@@ -32,7 +33,7 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false
   },
-  confirmed_hash: String,
+  confirm_hash: String,
   last_seen: {
     type: Date,
     default: new Date()
@@ -49,7 +50,10 @@ UserSchema.pre('save', function(next) {
   generatePasswordHash(user.password)
     .then(hash => {
       user.password = String(hash);
-      next();
+      generatePasswordHash(+new Date() + '').then(confirmHash => {
+        user.confirm_hash = String(confirmHash);
+        next();
+      });
     })
     .catch(err => {
       next(err);

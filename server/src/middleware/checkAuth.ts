@@ -3,7 +3,7 @@ import verifyJWTToken from "../utils/verifyJWToken";
 import { IUser } from "../models/User";
 
 export default (req: any, res: any, next: any) => {
-  if (req.path === "/user/login" || req.path === "/user/registration" || req.path === "/socket") {
+  if (req.path === "/user/signin" || req.path === "/user/signup" || req.path === "/socket" || req.path === "/user/verify") {
     return next();
   }
 

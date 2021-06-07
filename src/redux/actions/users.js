@@ -36,6 +36,36 @@ const actions = {
         dispatch(actions.fetchUserData());
       }
     })
+  },
+
+  fetchUserRegister: (postData) => dispatch => {
+    return usersApi.register(postData).then(({data}) => {
+      const {status, token} = data;
+
+      console.log(data)
+
+      // if (status === 'error') {
+      //   openNotification({
+      //     title: 'Ошибка при регистрации',
+      //     text: 'Неверный логин или пароль',
+      //     type: 'error'
+      //   })
+      // } else {
+      //   openNotification({
+      //     title: 'Авторизация успешна!',
+      //     text: 'Все супер, вы авторизовались!',
+      //     type: 'success',
+      //   });
+      //
+      //   window.axios.defaults.headers.common['token'] = token;
+      //   window.localStorage['token'] = token;
+      //
+      //   dispatch(actions.fetchUserData());
+      // }
+
+
+
+    })
   }
 };
 

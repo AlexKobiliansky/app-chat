@@ -2,5 +2,6 @@ import {check} from "express-validator";
 
 export default [
   check('email').isEmail(),
-  check('password').isLength({min: 5})
+  check('password').isLength({min: 5}),
+  check('fullName').isLength({min: 5})
 ]

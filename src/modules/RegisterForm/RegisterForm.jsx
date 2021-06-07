@@ -4,14 +4,20 @@ import {Form, Input} from "antd";
 import Button from "../../components/Button/Button";
 import {Link} from "react-router-dom";
 import {InfoCircleTwoTone} from "@ant-design/icons";
+import actions from "../../redux/actions/users";
+import {useDispatch} from "react-redux";
 
 
 
 const RegisterForm = () => {
+  const dispatch = useDispatch();
   const [success] = useState(false);
 
   const onFinish = (values) => {
-    console.log('Success:', values);
+    dispatch(actions.fetchUserRegister(values)).then(() => {
+      // history.push("/im");
+      console.log('Success:', values);
+    })
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -51,7 +57,7 @@ const RegisterForm = () => {
             </Form.Item>
 
             <Form.Item
-              name="username"
+              name="fullName"
               rules={[
                 { required: true, message: 'Please input your username!' },
                 {min: 4, message: 'Должно быть минимум 4 символа'}

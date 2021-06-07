@@ -1,6 +1,6 @@
 import express from 'express';
 import UserModel from '../models/User';
-import { validationResult } from 'express-validator';
+import {validationResult} from 'express-validator';
 import bcrypt from 'bcrypt';
 import socket from "socket.io";
 import createJWToken from "../utils/createJWToken";
@@ -29,7 +29,7 @@ class UserController {
   getMe = (req: any, res: express.Response) => {
     const id: string = req.user._id;
     UserModel.findById(id, (err, user) => {
-      if (err) {
+      if (err || !user) {
         return res.status(404).json({
           message: "User not found"
         });
@@ -45,12 +45,21 @@ class UserController {
       password: req.body.password,
     }
 
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(422).json({errors: errors.array()});
+    }
+
     const user = new UserModel(postData);
 
     user.save().then((obj: any) => {
       return res.json(obj);
     }).catch(reason => {
-      res.json(reason)
+      res.status(500).json({
+        status: 'error',
+        message: `Проблемы при регистрации: ${reason}`
+      })
     });
   }
 
@@ -79,7 +88,7 @@ class UserController {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() });
+      return res.status(422).json({errors: errors.array()});
     }
 
     UserModel.findOne({email: postData.email}, (err, user: any) => {
@@ -101,6 +110,39 @@ class UserController {
           message: 'incorrect password or email!'
         })
       }
+    });
+  }
+
+  verify = (req: express.Request, res: express.Response) => {
+    const hash = req.query.hash?.toString();
+
+    if (!hash) {
+      return res.status(422).json({
+        message: 'Invalid hash'
+      });
+    }
+
+    UserModel.findOne({confirm_hash: hash}, (err: any, user: any) => {
+      if (err || !user) {
+        return res.status(404).json({
+          status: "error",
+          message: "Hash not found"
+        });
+      }
+      user.confirmed = true;
+      user.save((err: any) => {
+        if (err || !user) {
+          return res.status(404).json({
+            status: "error",
+            message: err
+          });
+        }
+
+        res.json({
+          status: "success",
+          message: "Аккаунт успешно подтвержден!"
+        });
+      });
     });
   }
 
