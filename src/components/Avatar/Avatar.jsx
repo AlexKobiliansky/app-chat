@@ -3,7 +3,6 @@ import './Avatar.sass';
 import generateAvatar from '../../helpers/generateAvatar';
 
 const Avatar = user => {
-  console.log('avatar', user)
   if (user.avatar) {
     return <img className="avatar" src={user.avatar} alt='alt'/>
   } else {

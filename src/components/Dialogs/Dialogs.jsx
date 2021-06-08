@@ -5,6 +5,7 @@ import { Input, Empty } from 'antd';
 import dialogsActions from '../../redux/actions/dialogs';
 import './Dialogs.sass';
 import {useDispatch, useSelector} from 'react-redux';
+import socket from'../../core/socket';
 
 const Dialogs = ({items, userId}) => {
   let [filtered, setFiltered] = useState('');
@@ -27,6 +28,11 @@ const Dialogs = ({items, userId}) => {
   const onSelectDialog = (id) => {
     dispatch(dialogsActions.setCurrentDialog(id))
   }
+
+  socket.on('SERVER:DIALOG_CREATED', (data) => {
+    console.log(data)
+    dispatch(dialogsActions.fetchDialogs());
+  })
 
   return (
     <div className="dialogs">

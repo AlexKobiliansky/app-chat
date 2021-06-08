@@ -8,7 +8,7 @@ export default (
   ) => {
   if (req.user) {
     UserModel.findOneAndUpdate(
-      { _id: req.user._id },
+      { _id: req.body.author },
       {
         last_seen: new Date()
       },
