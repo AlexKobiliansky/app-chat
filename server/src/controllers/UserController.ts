@@ -16,7 +16,7 @@ class UserController {
 
   show = (req: express.Request, res: express.Response) => {
     const id: string = req.params.id
-    UserModel.findById(id, (err, user) => {
+    UserModel.findById(id, (err: any, user: any) => {
       if (err) {
         return res.status(404).json({
           message: 'Not found user'
@@ -28,7 +28,7 @@ class UserController {
 
   getMe = (req: any, res: express.Response) => {
     const id: string = req.user._id;
-    UserModel.findById(id, (err, user) => {
+    UserModel.findById(id, (err: any, user: any) => {
       if (err || !user) {
         return res.status(404).json({
           message: "User not found"
@@ -91,7 +91,7 @@ class UserController {
       return res.status(422).json({errors: errors.array()});
     }
 
-    UserModel.findOne({email: postData.email}, (err, user: any) => {
+    UserModel.findOne({email: postData.email}, (err: any, user: any) => {
       if (err || !user) {
         return res.status(404).json({
           message: 'auth error: no such user'
@@ -105,7 +105,7 @@ class UserController {
           token
         });
       } else {
-        res.json({
+        res.status(403).json({
           status: 'error',
           message: 'incorrect password or email!'
         })

@@ -18,7 +18,7 @@ const Dialogs = ({items, userId}) => {
 
   useEffect(() => {
     if (!dialogs.length) {
-      // dispatch(dialogsActions.fetchDialogs());
+      dispatch(dialogsActions.fetchDialogs());
     }
     setFiltered(dialogs);
     // eslint-disable-next-line react-hooks/exhaustive-deps
