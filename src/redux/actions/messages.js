@@ -5,10 +5,23 @@ const actions = {
     type: 'MESSAGES:SET_ITEMS',
     payload: items
   }),
+
   setIsLoading: bool => ({
     type: 'MESSAGES:SET_IS_LOADING',
     payload: bool
   }),
+
+  addMessage: message => (dispatch, getState) => {
+    const {dialogs} = getState();
+    const {currentDialogId} = dialogs;
+
+    if (currentDialogId === message.dialog._id) {
+      dispatch({
+        type: 'MESSAGES:ADD_MESSAGE',
+        payload: message
+      })
+    }
+  },
 
   fetchMessages: (dialogId) => dispatch => {
     dispatch(actions.setIsLoading(true));

@@ -22,6 +22,11 @@ const Dialogs = ({items, userId}) => {
       dispatch(dialogsActions.fetchDialogs());
     }
     setFiltered(dialogs);
+
+    socket.on('SERVER:DIALOG_CREATED', (data) => {
+      console.log(data)
+      dispatch(dialogsActions.fetchDialogs());
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dialogs]);
 
@@ -29,10 +34,7 @@ const Dialogs = ({items, userId}) => {
     dispatch(dialogsActions.setCurrentDialog(id))
   }
 
-  socket.on('SERVER:DIALOG_CREATED', (data) => {
-    console.log(data)
-    dispatch(dialogsActions.fetchDialogs());
-  })
+
 
   return (
     <div className="dialogs">

@@ -5,6 +5,8 @@ import {Empty, Spin} from 'antd';
 import {useDispatch, useSelector} from 'react-redux';
 import classNames from "classnames";
 import './Messages.sass';
+import socket from "../../core/socket";
+import dialogsActions from "../../redux/actions/dialogs";
 
 const Messages = () => {
   const dispatch = useDispatch();
@@ -13,17 +15,35 @@ const Messages = () => {
   const dialogId = useSelector(({dialogs}) => dialogs.currentDialogId);
   const messagesRef = useRef(null);
 
+  const onNewMessage = data => {
+    dispatch(messagesActions.addMessage(data))
+  }
+
 
   useEffect(() => {
     if (dialogId) {
       dispatch(messagesActions.fetchMessages(dialogId))
+    }
+
+    socket.on('SERVER:NEW_MESSAGE', onNewMessage)
+
+    return () => {
+      socket.removeListener('SERVER:NEW_MESSAGE', onNewMessage)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dialogId]);
 
   useEffect(() => {
       messagesRef.current.scrollTo(0, 99999)
-  }, [messages])
+  }, [messages]);
+
+  console.log('messages', messages)
+
+  // useEffect(() => {
+  //
+  // }, [])
+
+
 
   return (
     <div className={classNames('chat__dialog-messages', {'chat__dialog-isloading': isLoading})} ref={messagesRef}>

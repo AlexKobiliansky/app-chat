@@ -72,7 +72,7 @@ const Message = ({
       <div className="message__content">
         <IconReaded isMe={isMe} isReaded={isReaded} />
         {(audio || text || isTyping) && <div className="message__bubble">
-          {text && <p className="message__text">{text} <Emoji emoji=':santa::skin-tone-3:' size={16} /></p>}
+          {text && <p className="message__text">{text}</p>}
 
           {isTyping &&
           <div className="message__typing">
