@@ -7,9 +7,19 @@ const actions = {
     payload: data
   }),
 
+  setIsAuth: bool => ({
+    type: 'USERS:SET_IS_AUTH',
+    payload: bool
+  }),
+
   fetchUserData: () => dispatch =>{
     usersApi.getMe().then(({data}) => {
       dispatch(actions.setUserData(data));
+    }).catch(err => {
+      if (err.response.status === 403) {
+        dispatch(actions.setIsAuth(false));
+        delete window.localStorage.token;
+      }
     })
   },
 
