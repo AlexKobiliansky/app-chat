@@ -23,6 +23,10 @@ const actions = {
     }
   },
 
+  fetchSendMessage: (text, dialogId) => dispatch => {
+    messagesApi.send(text, dialogId);
+  },
+
   fetchMessages: (dialogId) => dispatch => {
     dispatch(actions.setIsLoading(true));
     messagesApi.getAllByDialogId(dialogId).then(({data}) => {

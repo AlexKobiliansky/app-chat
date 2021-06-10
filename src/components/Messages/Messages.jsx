@@ -6,10 +6,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import classNames from "classnames";
 import './Messages.sass';
 import socket from "../../core/socket";
-import dialogsActions from "../../redux/actions/dialogs";
 
 const Messages = () => {
   const dispatch = useDispatch();
+  const user = useSelector(({users}) => users.data);
   const messages = useSelector(({messages}) => messages.items);
   const isLoading = useSelector(({messages}) => messages.isLoading);
   const dialogId = useSelector(({dialogs}) => dialogs.currentDialogId);
@@ -18,7 +18,6 @@ const Messages = () => {
   const onNewMessage = data => {
     dispatch(messagesActions.addMessage(data))
   }
-
 
   useEffect(() => {
     if (dialogId) {
@@ -37,21 +36,13 @@ const Messages = () => {
       messagesRef.current.scrollTo(0, 99999)
   }, [messages]);
 
-  console.log('messages', messages)
-
-  // useEffect(() => {
-  //
-  // }, [])
-
-
-
   return (
     <div className={classNames('chat__dialog-messages', {'chat__dialog-isloading': isLoading})} ref={messagesRef}>
       {isLoading
         ? <Spin tip="Загрузка..." size="large" />
         : messages && !isLoading
           ? messages?.length
-            ? messages.map(item => <Message {...item} />)
+            ? messages.map(item => <Message {...item} key={item._id} isMe={user._id === item.user._id}/>)
             : <Empty description="Диалог пуст"/>
 
           : <Empty description="Откройте диалог"/>

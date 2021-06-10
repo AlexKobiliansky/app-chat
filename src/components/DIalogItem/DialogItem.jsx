@@ -19,9 +19,7 @@ const getMessageTime = updatedAt => {
 
 const DialogItem = ({_id, user, unreaded, isMe, updatedAt, text, onSelect, currentDialogId, lastMessage}) => {
 
-  console.log(lastMessage)
   return (
-
     <Link to={`/dialog/${_id}`}>
       <div
         className={classNames(

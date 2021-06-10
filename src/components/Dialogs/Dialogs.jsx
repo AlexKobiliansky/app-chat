@@ -7,34 +7,47 @@ import './Dialogs.sass';
 import {useDispatch, useSelector} from 'react-redux';
 import socket from'../../core/socket';
 
-const Dialogs = ({items, userId}) => {
+const Dialogs = ({userId}) => {
   let [filtered, setFiltered] = useState('');
   const dispatch = useDispatch();
   const dialogs = useSelector(({dialogs}) => dialogs.items);
   const currentDialogId = useSelector(({dialogs}) => dialogs.currentDialogId);
+  const [value, setValue] = useState("");
 
-  const onChangeInput = value => {
-    setFiltered(dialogs.filter(dialog => dialog.user.fullname.toLowerCase().indexOf(value.toLowerCase()) >= 0));
+  console.log(dialogs)
+
+  const onChangeInput = (value = "") => {
+    setFiltered(
+      dialogs.filter(
+        dialog =>
+          dialog.author.fullName.toLowerCase().indexOf(value.toLowerCase()) >= 0 ||
+          dialog.partner.fullName.toLowerCase().indexOf(value.toLowerCase()) >= 0
+      )
+    );
+    setValue(value);
+  };
+
+  const onNewDialog = () => {
+    dispatch(dialogsActions.fetchDialogs());
   }
 
   useEffect(() => {
-    if (!dialogs.length) {
-      dispatch(dialogsActions.fetchDialogs());
+    if (dialogs.length) {
+      onChangeInput();
     }
-    setFiltered(dialogs);
-
-    socket.on('SERVER:DIALOG_CREATED', (data) => {
-      console.log(data)
-      dispatch(dialogsActions.fetchDialogs());
-    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dialogs]);
+  }, [dialogs])
+
+  useEffect(() => {
+    dispatch(dialogsActions.fetchDialogs());
+    socket.on('SERVER:DIALOG_CREATED', onNewDialog)
+    return () => socket.removeListener('SERVER:DIALOG_CREATED', onNewDialog)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onSelectDialog = (id) => {
     dispatch(dialogsActions.setCurrentDialog(id))
   }
-
-
 
   return (
     <div className="dialogs">
@@ -43,6 +56,7 @@ const Dialogs = ({items, userId}) => {
           placeholder="Поиск среди контактов"
           onSearch = {onChangeInput}
           onChange={(e) => onChangeInput(e.target.value)}
+          value={value}
         />
       </div>
 

@@ -7,12 +7,24 @@ import {Input} from 'antd';
 import './ChatInput.sass';
 import {UploadField} from '@navjobs/upload';
 import {Picker} from 'emoji-mart';
+import {useDispatch, useSelector} from "react-redux";
+import messagesActions from "../../redux/actions/messages";
 
 const ChatInput = () => {
   const [emojiPickerVisible, setEmojiPickerVisible] = useState(false);
+  const [value, setValue] = useState('');
+  const dispatch = useDispatch();
+  const currentDialogId = useSelector(({dialogs}) => dialogs.currentDialogId);
 
   const toggleEmojiVisible = () => {
     setEmojiPickerVisible(!emojiPickerVisible);
+  }
+
+  const onSendMessage = (e) => {
+    if (e.key === 'Enter') {
+      dispatch(messagesActions.fetchSendMessage(value, currentDialogId))
+      setValue('');
+    }
   }
 
   return (
@@ -27,8 +39,11 @@ const ChatInput = () => {
         <SmileOutlined onClick={toggleEmojiVisible}/>
       </div>
       <Input
+        onChange={e => setValue(e.target.value)}
+        onKeyUp={onSendMessage}
         size="large"
         placeholder="Введите текст сообщения..."
+        value={value}
       />
       <div className="chat-input__actions">
         <UploadField
