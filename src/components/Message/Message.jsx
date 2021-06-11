@@ -16,6 +16,7 @@ import {Button, Popover} from 'antd';
 import EllipsisOutlined from "@ant-design/icons/EllipsisOutlined";
 import messagesActions from '../../redux/actions/messages';
 import {useDispatch} from 'react-redux';
+import reactStringReplace from "react-string-replace";
 
 const Message = ({
   id,
@@ -93,7 +94,11 @@ const Message = ({
 
         <IconReaded isMe={isMe} isReaded={isReaded} />
         {(audio || text || isTyping) && <div className="message__bubble">
-          {text && <p className="message__text">{text}</p>}
+          {text && <p className="message__text">
+            {reactStringReplace(text, /:(.+?):/g, (match, i) => (
+              <Emoji emoji={match} set='apple' size={18}/>
+            ))}
+          </p>}
 
           {isTyping &&
           <div className="message__typing">

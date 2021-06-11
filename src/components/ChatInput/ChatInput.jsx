@@ -10,6 +10,8 @@ import {Picker} from 'emoji-mart';
 import {useDispatch, useSelector} from "react-redux";
 import messagesActions from "../../redux/actions/messages";
 
+const {TextArea} = Input;
+
 const ChatInput = () => {
   const [emojiPickerVisible, setEmojiPickerVisible] = useState(false);
   const [value, setValue] = useState('');
@@ -27,23 +29,28 @@ const ChatInput = () => {
     }
   }
 
+  const addEmojiToMessage = ({colons}) => {
+    setValue((value + ' ' + colons).trim());
+  }
+
   return (
     <div className="chat-input">
       <div className="chat-input__smile">
         {emojiPickerVisible &&
         <div className="chat-input__emoji-picker">
-          <Picker set='apple'/>
+          <Picker set='apple' onSelect={(emojiTag) => addEmojiToMessage(emojiTag)}/>
         </div>
         }
 
         <SmileOutlined onClick={toggleEmojiVisible}/>
       </div>
-      <Input
+      <TextArea
         onChange={e => setValue(e.target.value)}
         onKeyUp={onSendMessage}
         size="large"
         placeholder="Введите текст сообщения..."
         value={value}
+        autoSize={{minRows:1, maxRows:10}} 
       />
       <div className="chat-input__actions">
         <UploadField

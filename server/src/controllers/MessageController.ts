@@ -97,6 +97,9 @@ class MessageController {
       if (message.user.toString() === userId) {
 
         const dialogId = message.dialog
+        message.remove();
+
+
         MessageModel.findOne({dialog: dialogId}, {}, {sort: {'created_at': -1}}, (err, lastMessage) => {
           if (err) {
             return res.status(500).json({
@@ -115,27 +118,13 @@ class MessageController {
 
             dialog.lastMessage = lastMessage;
             dialog.save();
-          })
-        })
-
-        MessageModel.findOneAndRemove({_id: id})
-          .then(message => {
-            if (message) {
-              res.json({
-                status: 'success',
-                message: `Message deleted!`
-              });
-            }
-          })
-          .catch(() => {
-            res.json({
-              status: 'error',
-              message: 'Not found message'
-            })
           });
+        });
 
-
-
+        return res.json({
+          status: 'success',
+          message: 'Message deleted'
+        })
       } else {
         return res.status(404).json({
           status: 'success',
