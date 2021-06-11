@@ -5,5 +5,6 @@ export default {
   send: (text, dialogId) => axios.post(`/messages`, {
     'text': text,
     'dialog_id': dialogId
-  })
+  }),
+  removeById: (id) => axios.delete(`/messages/${id}`)
 }

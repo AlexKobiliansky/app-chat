@@ -42,7 +42,7 @@ const Messages = () => {
         ? <Spin tip="Загрузка..." size="large" />
         : messages && !isLoading
           ? messages?.length
-            ? messages.map(item => <Message {...item} key={item._id} isMe={user._id === item.user._id}/>)
+            ? messages.map(item => <Message {...item} key={item._id} isMe={user._id === item.user._id} id={item._id}/>)
             : <Empty description="Диалог пуст"/>
 
           : <Empty description="Откройте диалог"/>

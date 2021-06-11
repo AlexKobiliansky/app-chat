@@ -24,6 +24,11 @@ export default function messagesReducer(state = initialState, {type, payload}) {
           payload
         ],
       }
+    case 'MESSAGES:DELETE_MESSAGE':
+      return {
+        ...state,
+        items: state.items.filter(message => message._id !== payload),
+      }
     default:
       return state
   }

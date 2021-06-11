@@ -12,8 +12,13 @@ import playIcon from '../../assets/img/play.svg';
 import {convertCurrentTime} from '../../helpers/convertCurrentTime';
 import Avatar from "../Avatar/Avatar";
 import { Emoji } from 'emoji-mart';
+import {Button, Popover} from 'antd';
+import EllipsisOutlined from "@ant-design/icons/EllipsisOutlined";
+import messagesActions from '../../redux/actions/messages';
+import {useDispatch} from 'react-redux';
 
 const Message = ({
+  id,
   avatar,
   user,
   text,
@@ -29,6 +34,7 @@ const Message = ({
   const [currentTime, setCurrentTime] = useState(0);
   const [progress, setProgress] = useState(0);
   const audioEl = useRef(null);
+  const dispatch = useDispatch();
 
   const togglePlay = () => {
     if (!isPlaying) {
@@ -56,7 +62,10 @@ const Message = ({
     }
   }, []);
 
-
+  const onRemoveMessage = () => {
+    console.log(id)
+    dispatch(messagesActions.removeMessageById(id))
+  };
   return (
     <div className={classNames('message', {
       'message__isme': isMe,
@@ -69,7 +78,19 @@ const Message = ({
         <Avatar {...user} />
         {/*<img src={avatar} alt={`Avatar ${user.fullname}`}/>*/}
       </div>
+
       <div className="message__content">
+        <div className="message__icon-actions">
+          <Popover
+            content={
+              <Button onClick={() => onRemoveMessage(id)}>Удалить сообщение</Button>
+            }
+            trigger="click"
+          >
+            <EllipsisOutlined style={{fontSize: "16px"}}/>
+          </Popover>
+        </div>
+
         <IconReaded isMe={isMe} isReaded={isReaded} />
         {(audio || text || isTyping) && <div className="message__bubble">
           {text && <p className="message__text">{text}</p>}

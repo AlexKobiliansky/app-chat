@@ -6,6 +6,9 @@
   max-width: 440px
   margin-bottom: 20px
   $self: &
+  &:hover
+    .message__icon-actions
+      display: block
   &__avatar
     border-radius: 50%
     width: 33px
@@ -40,6 +43,7 @@
     line-height: 20px
   &__content
     position: relative
+
   &__attachments
     display: flex
     padding-left: 5px
@@ -62,6 +66,12 @@
     position: absolute
     bottom: 25px
     right: -25px
+    &-actions
+      transform: rotate(90deg)
+      position: absolute
+      left: -29px
+      top: -4px
+      display: none
   &__isme
     flex-direction: row-reverse
     margin-left: auto

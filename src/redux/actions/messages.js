@@ -34,6 +34,20 @@ const actions = {
     }).catch(() => {
       dispatch(actions.setIsLoading(false));
     })
+  },
+
+  removeMessageById: (messageId) => dispatch => {
+
+    dispatch({
+      type: 'MESSAGES:DELETE_MESSAGE',
+      payload: messageId
+    });
+
+    messagesApi.removeById(messageId).then(({data}) => {
+
+    }).catch(() => {
+
+    })
   }
 };
 
