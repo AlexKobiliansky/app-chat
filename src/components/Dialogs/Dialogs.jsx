@@ -14,8 +14,6 @@ const Dialogs = ({userId}) => {
   const currentDialogId = useSelector(({dialogs}) => dialogs.currentDialogId);
   const [value, setValue] = useState("");
 
-  console.log(dialogs)
-
   const onChangeInput = (value = "") => {
     setFiltered(
       dialogs.filter(

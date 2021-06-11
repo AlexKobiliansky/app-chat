@@ -33,9 +33,9 @@ class DialogController {
     });
   }
 
-  create = (req: express.Request, res: express.Response) => {
+  create = (req: any, res: express.Response) => {
     const postData = {
-      author: req.body.author,
+      author: req.user._id,
       partner: req.body.partner
     };
     const dialog = new DialogModel(postData);
@@ -45,7 +45,7 @@ class DialogController {
       .then((dialogObj: any) => {
         const message = new MessageModel({
           text: req.body.text,
-          user: req.body.author,
+          user: req.user._id,
           dialog: dialogObj._id
         });
 

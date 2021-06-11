@@ -1,33 +1,17 @@
 import React from 'react';
-import Dialogs from '../../components/Dialogs/Dialogs';
-import TeamOutlined from '@ant-design/icons/TeamOutlined';
-import FormOutlined from '@ant-design/icons/FormOutlined';
 import EllipsisOutlined from '@ant-design/icons/EllipsisOutlined';
 import './Home.sass';
 import Status from '../../components/Status/Status';
 import ChatInput from '../../components/ChatInput/ChatInput';
 import Messages from '../../components/Messages/Messages';
+import Sidebar from "../../components/Sidebar/Sidebar";
 
 const Home = () => {
   return (
     <div className="home">
 
       <div className="chat">
-        <div className="chat__sidebar">
-          <div className="chat__sidebar-header">
-            <div>
-              <TeamOutlined />
-              <span>Список диалогов</span>
-            </div>
-            <FormOutlined />
-          </div>
-
-          <div className="chat__sidebar-dialogs">
-            <Dialogs
-              userId={0}
-            />
-          </div>
-        </div>
+        <Sidebar />
         <div className="chat__dialog">
           <div className="chat__dialog-header">
             <div />

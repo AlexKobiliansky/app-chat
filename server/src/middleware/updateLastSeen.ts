@@ -2,13 +2,13 @@ import UserModel from "../models/User";
 import express, {NextFunction} from "express";
 
 export default (
-  req: express.Request,
+  req: any,
   __: express.Response,
   next: NextFunction,
   ) => {
   if (req.user) {
     UserModel.findOneAndUpdate(
-      { _id: req.body.author },
+      { _id: req.user._id },
       {
         last_seen: new Date()
       },

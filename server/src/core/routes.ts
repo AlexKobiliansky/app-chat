@@ -20,13 +20,14 @@ const createRoutes = (app: express.Express, io: socket.Server) => {
   app.use(cors({origin: `http://localhost:${process.env.PORT}`}));
   app.use(bodyParser.json());
   app.use(checkAuth);
-  // app.use(updateLastSeen);
+  app.use(updateLastSeen);
 
 
   app.get("/user/me", User.getMe);
   app.get('/user/verify', User.verify);
   app.post('/user/signup', registerValidation, User.create);
   app.post('/user/signin', loginValidation, User.login);
+  app.get('/user/find', User.findUsers);
   app.get('/user/:id', User.show);
   app.delete('/user/:id', User.delete);
 
