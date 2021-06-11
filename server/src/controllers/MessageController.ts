@@ -117,7 +117,7 @@ class MessageController {
             dialog.save();
           })
         })
-        
+
         MessageModel.findOneAndRemove({_id: id})
           .then(message => {
             if (message) {
