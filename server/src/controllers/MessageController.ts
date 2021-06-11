@@ -15,14 +15,14 @@ class MessageController {
     const dialogId: any = req.query.dialog
     MessageModel.find({dialog: dialogId})
       .populate(['dialog', 'user'])
-      .exec(function(err, messages) {
-      if (err) {
-        return res.status(404).json({
-          message: 'No Messages'
-        });
-      }
-      return res.json(messages);
-    });
+      .exec(function (err, messages) {
+        if (err) {
+          return res.status(404).json({
+            message: 'No Messages'
+          });
+        }
+        return res.json(messages);
+      });
   }
 
 
@@ -52,7 +52,7 @@ class MessageController {
             {_id: postData.dialog},
             {lastMessage: message._id},
             {upsert: true},
-            function(err) {
+            function (err) {
               if (err) {
                 return res.status(404).json({
                   status: 'error',
@@ -82,21 +82,69 @@ class MessageController {
       });
   }
 
-  delete = (req: express.Request, res: express.Response) => {
+  delete = (req: any, res: express.Response) => {
     const id: string = req.params.id
-    MessageModel.findOneAndRemove({_id: id})
-      .then(message => {
-        if (message) {
-          res.json({
-            message: `Message deleted!`
-          });
-        }
-      })
-      .catch(() => {
-        res.json({
-          message: 'Not found message'
+    const userId: string = req.user._id
+
+    MessageModel.findById(id, (err: any, message: any) => {
+      if (err || !message) {
+        return res.status(404).json({
+          status: 'error',
+          message: err
         })
-      });
+      }
+
+      if (message.user.toString() === userId) {
+
+        const dialogId = message.dialog
+        MessageModel.findOne({dialog: dialogId}, {}, {sort: {'created_at': -1}}, (err, lastMessage) => {
+          if (err) {
+            return res.status(500).json({
+              status: 'error',
+              message: err
+            })
+          }
+
+          DialogModel.findById(dialogId, (err: any, dialog: any) => {
+            if (err) {
+              return res.status(500).json({
+                status: 'error',
+                message: err
+              })
+            }
+
+            dialog.lastMessage = lastMessage;
+            dialog.save();
+          })
+        })
+        
+        MessageModel.findOneAndRemove({_id: id})
+          .then(message => {
+            if (message) {
+              res.json({
+                status: 'success',
+                message: `Message deleted!`
+              });
+            }
+          })
+          .catch(() => {
+            res.json({
+              status: 'error',
+              message: 'Not found message'
+            })
+          });
+
+
+
+      } else {
+        return res.status(404).json({
+          status: 'success',
+          message: 'You cannot delete alien message'
+        })
+      }
+    })
+
+
   }
 }
 

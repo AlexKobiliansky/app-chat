@@ -38,16 +38,18 @@ const actions = {
 
   removeMessageById: (messageId) => dispatch => {
 
-    dispatch({
-      type: 'MESSAGES:DELETE_MESSAGE',
-      payload: messageId
-    });
+    if (window.confirm('Вы действительно хотите удалить сообщение?')) {
+      messagesApi.removeById(messageId).then(({data}) => {
+        dispatch({
+          type: 'MESSAGES:DELETE_MESSAGE',
+          payload: messageId
+        });
+      }).catch(() => {
+        dispatch(actions.setIsLoading(false));
+      })
+    }
 
-    messagesApi.removeById(messageId).then(({data}) => {
 
-    }).catch(() => {
-
-    })
   }
 };
 
