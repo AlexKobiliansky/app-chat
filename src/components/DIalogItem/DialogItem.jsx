@@ -42,9 +42,9 @@ const DialogItem = ({_id, user, unreaded, isMe, updatedAt, text, onSelect, curre
             <p>{lastMessage.text}</p>
             {isMe && <IconReaded isMe={true} isReaded={false}/>}
 
-            {lastMessage.unreaded > 0 &&
+            {lastMessage.readed > 0 &&
             <div className={classNames("dialogs__item-count", {'unreaded-many': lastMessage.unreaded > 100})}>
-              {lastMessage.unreaded < 100 ? lastMessage.unreaded : '99+'}
+              {lastMessage.readed < 100 ? lastMessage.readed : '99+'}
             </div>}
           </div>
         </div>
