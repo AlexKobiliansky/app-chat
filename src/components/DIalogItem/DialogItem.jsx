@@ -27,7 +27,6 @@ const DialogItem = ({_id, user, unreaded, isMe, updatedAt, text, onSelect, curre
           {"dialogs__item-online": lastMessage.user.online},
           {"dialogs__item--selected": currentDialogId === _id}
         )}
-        onClick={() => onSelect(_id)}
       >
         <div className="dialogs__item-avatar">
           <Avatar {...lastMessage.user} />

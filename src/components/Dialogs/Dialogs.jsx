@@ -39,13 +39,17 @@ const Dialogs = ({userId}) => {
   useEffect(() => {
     dispatch(dialogsActions.fetchDialogs());
     socket.on('SERVER:DIALOG_CREATED', onNewDialog)
-    return () => socket.removeListener('SERVER:DIALOG_CREATED', onNewDialog)
+    socket.on('SERVER:NEW_MESSAGE', onNewDialog)
+    return () => {
+      socket.removeListener('SERVER:DIALOG_CREATED', onNewDialog)
+      socket.removeListener('SERVER:NEW_MESSAGE', onNewDialog)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onSelectDialog = (id) => {
-    dispatch(dialogsActions.setCurrentDialog(id))
-  }
+  // const onSelectDialog = (id) => {
+  //   dispatch(dialogsActions.setCurrentDialog(id))
+  // }
 
   return (
     <div className="dialogs">
@@ -63,7 +67,7 @@ const Dialogs = ({userId}) => {
           <DialogItem
             key={item._id}
             isMe={item.author._id === userId}
-            onSelect = {onSelectDialog}
+            // onSelect = {onSelectDialog}
             currentDialogId={currentDialogId}
             {...item}
           />

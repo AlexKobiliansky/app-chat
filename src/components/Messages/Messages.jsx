@@ -15,6 +15,8 @@ const Messages = () => {
   const dialogId = useSelector(({dialogs}) => dialogs.currentDialogId);
   const messagesRef = useRef(null);
 
+
+
   const onNewMessage = data => {
     dispatch(messagesActions.addMessage(data))
   }
@@ -33,12 +35,20 @@ const Messages = () => {
   }, [dialogId]);
 
   useEffect(() => {
+    if (dialogId) {
       messagesRef.current.scrollTo(0, 99999)
+    }
   }, [messages]);
+
+  if (!dialogId) {
+    return null
+  }
+
+
 
   return (
     <div className={classNames('chat__dialog-messages', {'chat__dialog-isloading': isLoading})} ref={messagesRef}>
-      {isLoading
+      {isLoading && !user
         ? <Spin tip="Загрузка..." size="large" />
         : messages && !isLoading
           ? messages?.length

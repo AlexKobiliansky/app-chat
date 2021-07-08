@@ -15,8 +15,8 @@ function App() {
   return (
     <div className="wrapper">
       <Switch>
-        <Route exact path={["/", "/login", "/register", "/register/verify"]} component={Auth} />
-        <Route exact path={["/im", "/dialog/:id"]} component={Home} />
+        <Route exact path={["/login", "/register", "/register/verify"]} component={Auth} />
+        <Route exact path={["/", "/dialog/:id"]} component={Home} />
       </Switch>
     </div>
   );

@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import SmileOutlined from '@ant-design/icons/SmileOutlined';
 import CameraOutlined from '@ant-design/icons/CameraOutlined';
 import AudioOutlined from '@ant-design/icons/AudioOutlined';
 import SendOutlined from '@ant-design/icons/SendOutlined';
-import {Input} from 'antd';
+import {Empty, Input} from 'antd';
 import './ChatInput.sass';
 import {UploadField} from '@navjobs/upload';
 import {Picker} from 'emoji-mart';
@@ -17,6 +17,8 @@ const ChatInput = () => {
   const [value, setValue] = useState('');
   const dispatch = useDispatch();
   const currentDialogId = useSelector(({dialogs}) => dialogs.currentDialogId);
+
+
 
   const toggleEmojiVisible = () => {
     setEmojiPickerVisible(!emojiPickerVisible);
@@ -33,16 +35,36 @@ const ChatInput = () => {
     setValue((value + ' ' + colons).trim());
   }
 
+  const handleOutsideClick = (el, e) => {
+    if (el && !el.contains(e.target)) {
+      setEmojiPickerVisible(false)
+    }
+  };
+
+  useEffect(() => {
+    const el = document.querySelector('.chat-input__smile-btn');
+    document.addEventListener('click', handleOutsideClick.bind(this, el));
+
+    return () => {
+      document.removeEventListener('click', handleOutsideClick.bind(this, el));
+    }
+  }, []);
+
+  if (!currentDialogId) {
+    return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Откройте диалог" />;
+  }
+
   return (
     <div className="chat-input">
       <div className="chat-input__smile">
-        {emojiPickerVisible &&
         <div className="chat-input__emoji-picker">
-          <Picker set='apple' onSelect={(emojiTag) => addEmojiToMessage(emojiTag)}/>
+          {emojiPickerVisible &&
+          <div className="chat-input__emoji-picker">
+            <Picker set='apple' onSelect={(emojiTag) => addEmojiToMessage(emojiTag)}/>
+          </div>
+          }
         </div>
-        }
-
-        <SmileOutlined onClick={toggleEmojiVisible}/>
+        <SmileOutlined onClick={toggleEmojiVisible} className="chat-input__smile-btn" />
       </div>
       <TextArea
         onChange={e => setValue(e.target.value)}
