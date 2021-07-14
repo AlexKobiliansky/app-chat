@@ -16,16 +16,18 @@ export interface IMessage extends Document {
 // attachments:
 const MessageSchema = new Schema(
   {
-    text: { type: String, require: Boolean },
-    dialog: { type: Schema.Types.ObjectId, ref: "Dialog", require: true },
-    user: { type: Schema.Types.ObjectId, ref: "User", require: true },
+    text: {type: String, require: Boolean},
+    dialog: {type: Schema.Types.ObjectId, ref: "Dialog", require: true},
+    user: {type: Schema.Types.ObjectId, ref: "User", require: true},
     readed: {
       type: Boolean,
       default: false
-    }
+    },
+    attachments: [{type: Schema.Types.ObjectId, ref: "UploadedFile"}],
   },
   {
-    timestamps: true
+    timestamps: true,
+    usePushEach: true
   }
 );
 

@@ -9,12 +9,15 @@ import {UploadField} from '@navjobs/upload';
 import {Picker} from 'emoji-mart';
 import {useDispatch, useSelector} from "react-redux";
 import messagesActions from "../../redux/actions/messages";
+import UploadFiles from "../UploadFiles/UploadFiles";
+import filesApi from '../../api/files';
 
 const {TextArea} = Input;
 
 const ChatInput = () => {
   const [emojiPickerVisible, setEmojiPickerVisible] = useState(false);
   const [value, setValue] = useState('');
+  const [attachments, setAttachments] = useState([]);
   const dispatch = useDispatch();
   const currentDialogId = useSelector(({dialogs}) => dialogs.currentDialogId);
 
@@ -26,8 +29,9 @@ const ChatInput = () => {
 
   const onSendMessage = (e) => {
     if (e.key === 'Enter') {
-      dispatch(messagesActions.fetchSendMessage(value, currentDialogId))
+      dispatch(messagesActions.fetchSendMessage(value, currentDialogId, attachments.map(file => file.uid)))
       setValue('');
+      setAttachments([]);
     }
   }
 
@@ -49,6 +53,40 @@ const ChatInput = () => {
       document.removeEventListener('click', handleOutsideClick.bind(this, el));
     }
   }, []);
+
+  const onSelectFiles = async files => {
+    let uploaded = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const uid = Math.round(Math.random() * 1000);
+      uploaded = [
+        ...uploaded,
+        {
+          uid,
+          name: file.name,
+          status: "uploading"
+        }
+      ];
+      setAttachments(uploaded);
+      //eslint-disable-next-line no-loop-func
+
+      await filesApi.upload(file).then(({ data }) => {
+        uploaded = uploaded.map(item => {
+          if (item.uid === uid) {
+            return {
+              status: "done",
+              uid: data.file._id,
+              name: data.file.filename,
+              url: data.file.url
+            };
+          }
+          return item;
+        });
+
+      });
+    }
+    setAttachments(uploaded);
+  };
 
   if (!currentDialogId) {
     return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Откройте диалог" />;
@@ -76,7 +114,7 @@ const ChatInput = () => {
       />
       <div className="chat-input__actions">
         <UploadField
-          onFiles={files => console.log(files)}
+          onFiles={onSelectFiles}
           containerProps={{
             className: 'photos'
           }}
@@ -92,6 +130,7 @@ const ChatInput = () => {
         <AudioOutlined/>
         <SendOutlined/>
       </div>
+      <div><UploadFiles attachments={attachments}/></div>
     </div>
   );
 };

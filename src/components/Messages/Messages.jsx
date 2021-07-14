@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Message from '../Message/Message';
 import messagesActions from '../../redux/actions/messages';
 import {Empty, Spin} from 'antd';
@@ -14,12 +14,18 @@ const Messages = () => {
   const isLoading = useSelector(({messages}) => messages.isLoading);
   const dialogId = useSelector(({dialogs}) => dialogs.currentDialogId);
   const messagesRef = useRef(null);
+  const [chatInputHeight, setChatInputHeight] = useState(138+68)
+
 
 
 
   const onNewMessage = data => {
     dispatch(messagesActions.addMessage(data))
   }
+
+  useEffect(() => {
+    setChatInputHeight(document.querySelector('.chat__dialog-input').clientHeight + 68);
+}, [])
 
   useEffect(() => {
     if (dialogId) {
@@ -47,7 +53,11 @@ const Messages = () => {
 
 
   return (
-    <div className={classNames('chat__dialog-messages', {'chat__dialog-isloading': isLoading})} ref={messagesRef}>
+    <div
+      className={classNames('chat__dialog-messages', {'chat__dialog-isloading': isLoading})}
+      ref={messagesRef}
+      style={{height: `calc(100% - ${chatInputHeight}px)`}}
+    >
       {isLoading && !user
         ? <Spin tip="Загрузка..." size="large" />
         : messages && !isLoading

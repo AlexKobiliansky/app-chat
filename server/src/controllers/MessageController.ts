@@ -21,7 +21,7 @@ class MessageController {
     );
 
     MessageModel.find({dialog: dialogId})
-      .populate(['dialog', 'user'])
+      .populate(['dialog', 'user', 'attachments'])
       .exec(function (err, messages) {
         if (err) {
           return res.status(404).json({
@@ -40,7 +40,8 @@ class MessageController {
     const postData = {
       text: req.body.text,
       dialog: req.body.dialog_id,
-      user: userId
+      user: userId,
+      attachments: req.body.attachments
     };
 
     const message = new MessageModel(postData);
@@ -48,7 +49,7 @@ class MessageController {
     message
       .save()
       .then((obj: any) => {
-        obj.populate(['dialog', 'user'], (err: any, message: any) => {
+        obj.populate(['dialog', 'user', 'attachments'], (err: any, message: any) => {
           if (err) {
             return res.status(404).json({
               status: 'error',
@@ -68,17 +69,6 @@ class MessageController {
                 });
               }
             });
-
-          // message.save((err: any) => {
-          //   if (err) {
-          //     return res.status(500).json({
-          //       status: 'error',
-          //       message: 'No Messages'
-          //     });
-          //   }
-          //
-          //
-          // })
 
           res.json(message);
           this.io.emit('SERVER:NEW_MESSAGE', message)

@@ -64,14 +64,13 @@ const Message = ({
   }, []);
 
   const onRemoveMessage = () => {
-    console.log(id)
     dispatch(messagesActions.removeMessageById(id))
   };
   return (
     <div className={classNames('message', {
       'message__isme': isMe,
       'message__is-typing': isTyping,
-      'message__image': attachments?.length === 1,
+      'message__image': attachments?.length === 1 && !text,
       'message__is-audio': audio
     })}>
       <div className="message__avatar">
