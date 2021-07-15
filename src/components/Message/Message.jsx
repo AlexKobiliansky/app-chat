@@ -17,6 +17,7 @@ import EllipsisOutlined from "@ant-design/icons/EllipsisOutlined";
 import messagesActions from '../../redux/actions/messages';
 import {useDispatch} from 'react-redux';
 import reactStringReplace from "react-string-replace";
+import {EyeOutlined} from "@ant-design/icons";
 
 const Message = ({
   id,
@@ -28,7 +29,8 @@ const Message = ({
   isReaded,
   attachments,
   isTyping,
-  audio
+  audio,
+  setPreviewImage
 }) => {
 
   const [isPlaying, setIsPlaying] = useState(false);
@@ -128,8 +130,10 @@ const Message = ({
         {attachments &&
         <div className="message__attachments">
           {attachments?.map((item, index) => (
-            <div key={index} className="message__attachments-item">
+            <div key={index} className="message__attachments-item" onClick={() => setPreviewImage(item.url)}>
+
               <img src={item.url} alt={item.filename}/>
+              <EyeOutlined />
             </div>
           ))}
         </div>}

@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import classNames from "classnames";
 import './Messages.sass';
 import socket from "../../core/socket";
+import { Modal } from 'antd';
 
 const Messages = () => {
   const dispatch = useDispatch();
@@ -14,10 +15,8 @@ const Messages = () => {
   const isLoading = useSelector(({messages}) => messages.isLoading);
   const dialogId = useSelector(({dialogs}) => dialogs.currentDialogId);
   const messagesRef = useRef(null);
-  const [chatInputHeight, setChatInputHeight] = useState(138+68)
-
-
-
+  const [chatInputHeight, setChatInputHeight] = useState(138+68);
+  const [previewImage, setPreviewImage] = useState(null);
 
   const onNewMessage = data => {
     dispatch(messagesActions.addMessage(data))
@@ -50,8 +49,6 @@ const Messages = () => {
     return null
   }
 
-
-
   return (
     <div
       className={classNames('chat__dialog-messages', {'chat__dialog-isloading': isLoading})}
@@ -62,11 +59,29 @@ const Messages = () => {
         ? <Spin tip="Загрузка..." size="large" />
         : messages && !isLoading
           ? messages?.length
-            ? messages.map(item => <Message {...item} key={item._id} isMe={user._id === item.user._id} id={item._id}/>)
+            ? messages.map(item =>
+              <Message
+                key={item._id}
+                {...item}
+                isMe={user._id === item.user._id}
+                id={item._id}
+                setPreviewImage={setPreviewImage}
+              />)
             : <Empty description="Диалог пуст"/>
 
           : <Empty description="Откройте диалог"/>
       }
+
+      <Modal
+        className="preview-image"
+        title={null}
+        visible={!!previewImage}
+        onCancel={() => setPreviewImage(false)}
+        footer={null}
+        bodyStyle={{padding: '0px', fontSize: '0px'}}
+      >
+        <img src={previewImage} alt="Preview"/>
+      </Modal>
     </div>
   )
 };

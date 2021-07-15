@@ -12,7 +12,7 @@ import cors from "cors";
 import updateLastSeen from "../middleware/updateLastSeen";
 import checkAuth from "../middleware/checkAuth";
 
-import uploader from "./uploader";
+import uploader from "./multer";
 
 
 const createRoutes = (app: express.Express, io: socket.Server) => {
@@ -45,7 +45,7 @@ const createRoutes = (app: express.Express, io: socket.Server) => {
   app.post('/messages', Message.create);
   app.delete('/messages/:id', Message.delete);
 
-  app.post('/files', uploader.single('image'), UploadedFile.create);
+  app.post('/files', uploader.single('file'), UploadedFile.create);
   app.delete('/files/:id', UploadedFile.delete);
 }
 

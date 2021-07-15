@@ -11,15 +11,27 @@ import {useDispatch, useSelector} from "react-redux";
 import messagesActions from "../../redux/actions/messages";
 import UploadFiles from "../UploadFiles/UploadFiles";
 import filesApi from '../../api/files';
+import {CheckOutlined, CheckSquareOutlined, CloseCircleOutlined} from "@ant-design/icons";
 
 const {TextArea} = Input;
 
 const ChatInput = () => {
+
+
+  window.navigator.getUserMedia =
+    window.navigator.getUserMedia ||
+    window.navigator.mozGetUserMedia ||
+    window.navigator.msGetUserMedia ||
+    window.navigator.webkitGetUserMedia;
+
   const [emojiPickerVisible, setEmojiPickerVisible] = useState(false);
   const [value, setValue] = useState('');
   const [attachments, setAttachments] = useState([]);
   const dispatch = useDispatch();
   const currentDialogId = useSelector(({dialogs}) => dialogs.currentDialogId);
+  const [isRecording, setIsRecording] = useState(false);
+  const [mediaRecorder, setMediaRecorder] = useState(null);
+  const [isLoading, setLoading] = useState(false);
 
 
 
@@ -27,8 +39,10 @@ const ChatInput = () => {
     setEmojiPickerVisible(!emojiPickerVisible);
   }
 
-  const onSendMessage = (e) => {
-    if (e.key === 'Enter') {
+  const onSendMessage = () => {
+    if (isRecording) {
+      mediaRecorder.stop();
+    } else if (value) {
       dispatch(messagesActions.fetchSendMessage(value, currentDialogId, attachments.map(file => file.uid)))
       setValue('');
       setAttachments([]);
@@ -88,6 +102,56 @@ const ChatInput = () => {
     setAttachments(uploaded);
   };
 
+  const onRecord = () => {
+    if (navigator.getUserMedia) {
+      navigator.getUserMedia({ audio: true }, onRecording, onError);
+    }
+  };
+
+  const onRecording = stream => {
+    const recorder = new MediaRecorder(stream);
+
+    setMediaRecorder(recorder);
+
+    recorder.start();
+
+    recorder.onstart = () => {
+      setIsRecording(true);
+    };
+
+    recorder.onstop = () => {
+      setIsRecording(false);
+    };
+
+    recorder.ondataavailable = e => {
+      const file = new File([e.data], "audio.webm");
+      setLoading(true);
+      filesApi.upload(file).then(({ data }) => {
+        // sendAudio(data.file._id).then(() => {
+        //   setLoading(false);
+        // });
+        sendAudio(data.file._id);
+        setLoading(false);
+      });
+    };
+  };
+
+  const onError = err => {
+    console.log("The following error occured: " + err);
+  };
+
+  const sendAudio = audioId => {
+    return dispatch(messagesActions.fetchSendMessage({
+      text: null,
+      dialogId: currentDialogId,
+      attachments: [audioId]
+    }));
+  };
+
+  const onStopRecording = () => {
+    setIsRecording(false);
+  };
+
   if (!currentDialogId) {
     return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Откройте диалог" />;
   }
@@ -104,14 +168,21 @@ const ChatInput = () => {
         </div>
         <SmileOutlined onClick={toggleEmojiVisible} className="chat-input__smile-btn" />
       </div>
-      <TextArea
-        onChange={e => setValue(e.target.value)}
-        onKeyUp={onSendMessage}
-        size="large"
-        placeholder="Введите текст сообщения..."
-        value={value}
-        autoSize={{minRows:1, maxRows:10}}
-      />
+      {isRecording ? (<div className="chat-input__record-status">
+        <i></i>
+        Recording...
+        <CloseCircleOutlined onClick={onStopRecording}/>
+      </div>) : (
+        <TextArea
+          onChange={e => setValue(e.target.value)}
+          // onKeyUp={onSendMessage}
+          size="large"
+          placeholder="Введите текст сообщения..."
+          value={value}
+          autoSize={{minRows:1, maxRows:10}}
+        />
+      )}
+
       <div className="chat-input__actions">
         <UploadField
           onFiles={onSelectFiles}
@@ -127,8 +198,16 @@ const ChatInput = () => {
           <CameraOutlined/>
         </UploadField>
 
-        <AudioOutlined/>
-        <SendOutlined/>
+        {isRecording || value || attachments.length ? (
+          <CheckSquareOutlined />
+        ) : (
+          <div className="chat-input_record-btn">
+            <AudioOutlined onClick={onRecord}/>
+          </div>
+        )}
+
+
+        <SendOutlined onClick={onSendMessage}/>
       </div>
       <div><UploadFiles attachments={attachments}/></div>
     </div>

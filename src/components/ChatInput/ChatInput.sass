@@ -31,3 +31,30 @@
     position: absolute
     bottom: 40px
     left: -15px
+  &__record-status
+    i
+      display: inline-block
+      height: 10px
+      width: 10px
+      background-color: #f56b6b
+      border-radius: 50%
+      position: relative
+      &:before
+        content: ''
+        position: absolute
+        left: 0
+        top: 0
+        height: 10px
+        width: 10px
+        background-color: rgba(245, 107, 107, 0.4)
+        border-radius: 50%
+        animation: record-animation 0.8s ease-in-out infinite
+
+
+@keyframes record-animation
+  0%
+    transform: scale(1)
+  50%
+    transform: scale(1.5)
+  100%
+    transform: scale(1)
