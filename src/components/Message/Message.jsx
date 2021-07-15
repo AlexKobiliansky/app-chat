@@ -10,6 +10,7 @@ import pauseIcon from '../../assets/img/pause.svg';
 import playIcon from '../../assets/img/play.svg';
 
 import {convertCurrentTime} from '../../helpers/convertCurrentTime';
+import {isAudio} from '../../helpers/isAudio';
 import Avatar from "../Avatar/Avatar";
 import { Emoji } from 'emoji-mart';
 import {Button, Popover} from 'antd';
@@ -18,6 +19,8 @@ import messagesActions from '../../redux/actions/messages';
 import {useDispatch} from 'react-redux';
 import reactStringReplace from "react-string-replace";
 import {EyeOutlined} from "@ant-design/icons";
+
+
 
 const Message = ({
   id,
@@ -38,6 +41,49 @@ const Message = ({
   const [progress, setProgress] = useState(0);
   const audioEl = useRef(null);
   const dispatch = useDispatch();
+
+  const renderAttachment = item => {
+    // <div key={index} className="message__attachments-item" onClick={() => setPreviewImage(item.url)}>
+    //
+    //   <img src={item.url} alt={item.filename}/>
+    //   <EyeOutlined />
+    // </div>
+
+    if (item.ext !== "webm") {
+      return (
+        <div
+          key={item._id}
+          onClick={() => setPreviewImage(item.url)}
+          className="message__attachments-item"
+        >
+          <img src={item.url} alt={item.filename}/>
+          <EyeOutlined />
+        </div>
+      );
+    } else {
+      return (
+        <div className="message__audio">
+          <audio ref={audioEl} src={item.url} preload="auto" />
+          <div className="message__audio-progress" style={{width: progress + '%'}} />
+          <div className="message__audio-info">
+            <div className="message__audio-btn">
+              <button onClick={togglePlay}>
+                {isPlaying ? <img src={pauseIcon} alt="alt"/> : <img src={playIcon} alt="alt"/>}
+              </button>
+            </div>
+            <div className="message__audio-wave">
+              <img src={waveIcon} alt="alt"/>
+            </div>
+            <span className="message__audio-duration">
+                {convertCurrentTime(currentTime)}
+              </span>
+          </div>
+        </div>
+      )
+      // <MessageAudio key={item._id} audioSrc={item.url} />;
+    }
+  }
+
 
   const togglePlay = () => {
     if (!isPlaying) {
@@ -72,8 +118,12 @@ const Message = ({
     <div className={classNames('message', {
       'message__isme': isMe,
       'message__is-typing': isTyping,
-      'message__image': attachments?.length === 1 && !text,
-      'message__is-audio': audio
+      'message__image':
+        !isAudio(attachments) &&
+        attachments &&
+        attachments.length === 1 &&
+        !text,
+      'message__is-audio': isAudio(attachments)
     })}>
       <div className="message__avatar">
 
@@ -129,13 +179,7 @@ const Message = ({
 
         {attachments &&
         <div className="message__attachments">
-          {attachments?.map((item, index) => (
-            <div key={index} className="message__attachments-item" onClick={() => setPreviewImage(item.url)}>
-
-              <img src={item.url} alt={item.filename}/>
-              <EyeOutlined />
-            </div>
-          ))}
+          {attachments?.map((item, index) => renderAttachment(item))}
         </div>}
 
         {date && <div className="message__date">

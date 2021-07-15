@@ -43,7 +43,11 @@ const ChatInput = () => {
     if (isRecording) {
       mediaRecorder.stop();
     } else if (value) {
-      dispatch(messagesActions.fetchSendMessage(value, currentDialogId, attachments.map(file => file.uid)))
+      dispatch(messagesActions.fetchSendMessage({
+        text: value,
+        dialogId: currentDialogId,
+        attachments: attachments.map(file => file.uid)
+      }))
       setValue('');
       setAttachments([]);
     }

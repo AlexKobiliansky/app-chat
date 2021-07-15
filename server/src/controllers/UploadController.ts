@@ -22,11 +22,13 @@ class UploadController {
           throw new Error(error);
         }
 
+        console.log(result);
+
         const fileData = {
           filename: result.original_filename,
           size: result.bytes,
           ext: result.format,
-          url: result.path,
+          url: result.url,
           user: userId
         };
 
