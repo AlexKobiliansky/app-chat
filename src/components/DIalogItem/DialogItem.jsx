@@ -17,29 +17,29 @@ const getMessageTime = updatedAt => {
   }
 }
 
-const DialogItem = ({_id, user, unreaded, isMe, updatedAt, text, onSelect, currentDialogId, lastMessage}) => {
+const DialogItem = ({_id, user, unreaded, isMe, updatedAt, text, onSelect, currentDialogId, lastMessage, partner, userId}) => {
 
   return (
     <Link to={`/dialog/${_id}`}>
       <div
         className={classNames(
           "dialogs__item",
-          {"dialogs__item-online": lastMessage.user.online},
+          {"dialogs__item-online": partner.online},
           {"dialogs__item--selected": currentDialogId === _id}
         )}
       >
         <div className="dialogs__item-avatar">
-          <Avatar {...lastMessage.user} />
+          <Avatar {...partner} />
         </div>
         <div className="dialogs__item-info">
           <div className="dialogs__item-info-top">
-            <b>{lastMessage.user.fullName}</b>
+            <b>{partner.fullName}</b>
             <span>
             {getMessageTime(lastMessage.updatedAt)}
           </span>
           </div>
           <div className="dialogs__item-info-bottom">
-            <p>{lastMessage.text}</p>
+            <p>{lastMessage.user._id === userId ? `Вы: ${lastMessage.text}` : lastMessage.text }</p>
             {isMe && <IconReaded isMe={true} isReaded={false}/>}
 
             {lastMessage.readed > 0 &&

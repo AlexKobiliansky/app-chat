@@ -7,27 +7,27 @@ import ChatInput from '../../components/ChatInput/ChatInput';
 import Messages from '../../components/Messages/Messages';
 import Sidebar from "../../components/Sidebar/Sidebar";
 import dialogsActions from '../../redux/actions/dialogs';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
 const Home = () => {
   const location = useLocation();
   const dispatch = useDispatch();
+  const user = useSelector(({users}) => users.data);
 
   useEffect(() => {
     const dialogId = location.pathname.split('/').pop();
 
     dispatch(dialogsActions.setCurrentDialog(dialogId));
 
-  }, [location.pathname])
+  }, [location.pathname]);
 
   return (
     <div className="home">
-
       <div className="chat">
         <Sidebar />
-        <div className="chat__dialog">
+        {user && <div className="chat__dialog">
           <div className="chat__dialog-header">
-            <div />
+            <div/>
             <div className="chat__dialog-header-center">
               <b className="chat__dialog-header-username">Дмитрий Новиков</b>
               <div className="chat__dialog-header-status">
@@ -37,12 +37,12 @@ const Home = () => {
             <EllipsisOutlined style={{fontSize: "22px"}}/>
           </div>
 
-          <Messages />
+          <Messages/>
 
           <div className="chat__dialog-input">
-            <ChatInput />
+            <ChatInput/>
           </div>
-        </div>
+        </div>}
       </div>
     </div>
   );
