@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import classNames from "classnames";
 import './Messages.sass';
 import socket from "../../core/socket";
-import { Modal } from 'antd';
+import {Modal} from 'antd';
 
 const Messages = () => {
   const dispatch = useDispatch();
@@ -15,8 +15,10 @@ const Messages = () => {
   const isLoading = useSelector(({messages}) => messages.isLoading);
   const dialogId = useSelector(({dialogs}) => dialogs.currentDialogId);
   const messagesRef = useRef(null);
-  const [chatInputHeight, setChatInputHeight] = useState(138+68);
+  const [chatInputHeight, setChatInputHeight] = useState(138 + 68);
   const [previewImage, setPreviewImage] = useState(null);
+  const [isTyping, setIsTyping] = useState(false);
+  let typingTimeoutId = null;
 
   const onNewMessage = data => {
     dispatch(messagesActions.addMessage(data))
@@ -24,7 +26,23 @@ const Messages = () => {
 
   useEffect(() => {
     setChatInputHeight(document.querySelector('.chat__dialog-input').clientHeight + 68);
-}, [])
+  }, []);
+
+  const toggleIsTyping = () => {
+    setIsTyping(true);
+    clearInterval(typingTimeoutId);
+    typingTimeoutId = setTimeout(() => {
+      setIsTyping(false)
+    }, 3000)
+
+  }
+
+  useEffect(() => {
+    socket.on('DIALOGS:TYPING', toggleIsTyping);
+    return () => {
+      socket.remove('DIALOGS:TYPING', toggleIsTyping);
+    }
+  }, [])
 
   useEffect(() => {
     if (dialogId) {
@@ -56,7 +74,7 @@ const Messages = () => {
       style={{height: `calc(100% - ${chatInputHeight}px)`}}
     >
       {isLoading && !user
-        ? <Spin tip="Загрузка..." size="large" />
+        ? <Spin tip="Загрузка..." size="large"/>
         : messages && !isLoading
           ? messages?.length
             ? messages.map(item =>
@@ -66,6 +84,7 @@ const Messages = () => {
                 isMe={user._id === item.user._id}
                 id={item._id}
                 setPreviewImage={setPreviewImage}
+                isTyping={isTyping}
               />)
             : <Empty description="Диалог пуст"/>
 

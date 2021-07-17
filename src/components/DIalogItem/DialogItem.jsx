@@ -7,6 +7,7 @@ import isToday from 'date-fns/isToday';
 import parseISO from 'date-fns/parseISO';
 import Avatar from '../Avatar/Avatar';
 import {Link} from "react-router-dom";
+import {isAudio} from '../../helpers/isAudio';
 
 const getMessageTime = updatedAt => {
   const date = parseISO(updatedAt)
@@ -15,6 +16,18 @@ const getMessageTime = updatedAt => {
   } else {
     return format(date, 'dd.MM.yyyy')
   }
+}
+
+const renderLastMessage = (message, userId) => {
+  let text = '';
+
+  if (!message.text && message.attachments.length) {
+    text = 'файл';
+  } else {
+    text = message.text
+  }
+
+  return `${message.user._id === userId ? 'Вы: ' : ''}${text}`;
 }
 
 const DialogItem = ({_id, user, unreaded, isMe, updatedAt, text, onSelect, currentDialogId, lastMessage, partner, userId}) => {
@@ -39,7 +52,7 @@ const DialogItem = ({_id, user, unreaded, isMe, updatedAt, text, onSelect, curre
           </span>
           </div>
           <div className="dialogs__item-info-bottom">
-            <p>{lastMessage.user._id === userId ? `Вы: ${lastMessage.text}` : lastMessage.text }</p>
+            <p>{ renderLastMessage(lastMessage, userId) }</p>
             {isMe && <IconReaded isMe={true} isReaded={false}/>}
 
             {lastMessage.readed > 0 &&

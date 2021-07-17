@@ -13,6 +13,7 @@ import attachmentsActions from "../../redux/actions/attachments";
 import UploadFiles from "../UploadFiles/UploadFiles";
 import filesApi from '../../api/files';
 import {CheckOutlined, CheckSquareOutlined, CloseCircleOutlined, LoadingOutlined} from "@ant-design/icons";
+import socket from "../../core/socket";
 
 const {TextArea} = Input;
 
@@ -31,6 +32,7 @@ const ChatInput = () => {
   const dispatch = useDispatch();
   const currentDialogId = useSelector(({dialogs}) => dialogs.currentDialogId);
   const attachments = useSelector(({attachments}) => attachments.items);
+  const user = useSelector(({users}) => users.data);
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [isLoading, setLoading] = useState(false);
@@ -57,7 +59,7 @@ const ChatInput = () => {
 
 
   const handleSendMessage = (e) => {
-    // socket.emit("DIALOGS:TYPING", { dialogId: currentDialogId, user });
+    socket.emit("DIALOGS:TYPING", { dialogId: currentDialogId, user });
     if (e.keyCode === 13) {
       sendMessage();
     }
