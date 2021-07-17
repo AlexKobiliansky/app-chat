@@ -9,9 +9,10 @@ import {UploadField} from '@navjobs/upload';
 import {Picker} from 'emoji-mart';
 import {useDispatch, useSelector} from "react-redux";
 import messagesActions from "../../redux/actions/messages";
+import attachmentsActions from "../../redux/actions/attachments";
 import UploadFiles from "../UploadFiles/UploadFiles";
 import filesApi from '../../api/files';
-import {CheckOutlined, CheckSquareOutlined, CloseCircleOutlined} from "@ant-design/icons";
+import {CheckOutlined, CheckSquareOutlined, CloseCircleOutlined, LoadingOutlined} from "@ant-design/icons";
 
 const {TextArea} = Input;
 
@@ -26,9 +27,10 @@ const ChatInput = () => {
 
   const [emojiPickerVisible, setEmojiPickerVisible] = useState(false);
   const [value, setValue] = useState('');
-  const [attachments, setAttachments] = useState([]);
+  // const [attachments, setAttachments] = useState([]);
   const dispatch = useDispatch();
   const currentDialogId = useSelector(({dialogs}) => dialogs.currentDialogId);
+  const attachments = useSelector(({attachments}) => attachments.items);
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [isLoading, setLoading] = useState(false);
@@ -39,7 +41,7 @@ const ChatInput = () => {
     setEmojiPickerVisible(!emojiPickerVisible);
   }
 
-  const onSendMessage = () => {
+  const sendMessage = () => {
     if (isRecording) {
       mediaRecorder.stop();
     } else if (value) {
@@ -49,7 +51,15 @@ const ChatInput = () => {
         attachments: attachments.map(file => file.uid)
       }))
       setValue('');
-      setAttachments([]);
+      dispatch(attachmentsActions.setAttachments([]));
+    }
+  };
+
+
+  const handleSendMessage = (e) => {
+    // socket.emit("DIALOGS:TYPING", { dialogId: currentDialogId, user });
+    if (e.keyCode === 13) {
+      sendMessage();
     }
   }
 
@@ -85,7 +95,7 @@ const ChatInput = () => {
           status: "uploading"
         }
       ];
-      setAttachments(uploaded);
+      dispatch(attachmentsActions.setAttachments(uploaded));
       //eslint-disable-next-line no-loop-func
 
       await filesApi.upload(file).then(({ data }) => {
@@ -103,7 +113,7 @@ const ChatInput = () => {
 
       });
     }
-    setAttachments(uploaded);
+    dispatch(attachmentsActions.setAttachments(uploaded));
   };
 
   const onRecord = () => {
@@ -131,11 +141,11 @@ const ChatInput = () => {
       const file = new File([e.data], "audio.webm");
       setLoading(true);
       filesApi.upload(file).then(({ data }) => {
-        // sendAudio(data.file._id).then(() => {
-        //   setLoading(false);
-        // });
-        sendAudio(data.file._id);
-        setLoading(false);
+        sendAudio(data.file._id).then(() => {
+          setLoading(false);
+        });
+        // sendAudio(data.file._id);
+        // setLoading(false);
       });
     };
   };
@@ -179,7 +189,7 @@ const ChatInput = () => {
       </div>) : (
         <TextArea
           onChange={e => setValue(e.target.value)}
-          // onKeyUp={onSendMessage}
+          onKeyUp={handleSendMessage}
           size="large"
           placeholder="Введите текст сообщения..."
           value={value}
@@ -202,7 +212,9 @@ const ChatInput = () => {
           <CameraOutlined/>
         </UploadField>
 
-        {isRecording || value || attachments.length ? (
+        {isLoading
+          ? <LoadingOutlined />
+          : isRecording || value || attachments.length ? (
           <CheckSquareOutlined />
         ) : (
           <div className="chat-input_record-btn">
@@ -211,9 +223,9 @@ const ChatInput = () => {
         )}
 
 
-        <SendOutlined onClick={onSendMessage}/>
+        <SendOutlined onClick={sendMessage}/>
       </div>
-      <div><UploadFiles attachments={attachments}/></div>
+      <div><UploadFiles attachments={attachments} /></div>
     </div>
   );
 };

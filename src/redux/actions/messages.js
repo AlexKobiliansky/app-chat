@@ -24,7 +24,7 @@ const actions = {
   },
 
   fetchSendMessage: ({text, dialogId, attachments}) => dispatch => {
-    messagesApi.send(text, dialogId, attachments);
+    return messagesApi.send(text, dialogId, attachments);
   },
 
   fetchMessages: (dialogId) => dispatch => {
